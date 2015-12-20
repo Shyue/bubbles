@@ -1,7 +1,6 @@
 package edu.mbhs.cs.bubbles.android;
 
 import android.os.Bundle;
-
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import edu.mbhs.cs.bubbles.Bubbles;
