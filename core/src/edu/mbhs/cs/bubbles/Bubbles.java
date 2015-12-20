@@ -16,6 +16,7 @@ public class Bubbles extends ApplicationAdapter {
 	@Override
 	public void create () {
 		stage = new Stage();
+		
 	//	batch = new SpriteBatch();
 		Gdx.app.log("AssetPath", Gdx.files.internal("assets/bubble.jpg").file().getAbsolutePath());
 		//img = new Texture("badlogic.jpg");
