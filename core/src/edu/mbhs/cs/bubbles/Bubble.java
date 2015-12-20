@@ -24,21 +24,54 @@ public class Bubble extends Actor{
 		b=(float)Math.pow(Math.random(),1.0/5);
 		xVelocity = (float)Math.random()*10;
 		yVelocity = (float)Math.random()*10;
+		r_vel = 0.5f;
+		g_vel = 0.5f;
+		b_vel=0.5f;
 	}
 	
 	@Override
 	public void act(float delta){
 		x+=xVelocity*delta;
 		y+=yVelocity*delta;
-		if(x>=this.getStage().getWidth()-130 || x<=0){
-			xVelocity*=-1;
+		r+=r_vel*delta;
+		g+=g_vel*delta;
+		b+=b_vel*delta;
+		if(x>=this.getStage().getWidth()-140 || x<=0){
+			if(x<=0){
+				xVelocity = Math.abs(xVelocity);
+			}
+			else{
+				xVelocity = -Math.abs(xVelocity);
+			}
 		}
-		if(y>=this.getStage().getHeight()-130 || y<=0){
-			yVelocity*=-1;
+		if(y>=this.getStage().getHeight()-170 || y<=0){
+			if(y<=0){
+				yVelocity = Math.abs(yVelocity);
+			}
+			else{
+				yVelocity = -Math.abs(yVelocity);
+			}
 		}
 		//somebody make a method
 		xVelocity+=200*Math.pow(1-Math.random(),3)*delta;
 		yVelocity+=200*Math.pow(1-Math.random(),3)*delta;
+		r_vel+=Math.pow(1-Math.random(),3)*delta;
+		g_vel+=Math.pow(1-Math.random(),3)*delta;
+		b_vel+=Math.pow(1-Math.random(),3)*delta;
+		if(r+g+b<1f){
+			r_vel+=0.5f;
+			g_vel+=0.5f;
+			b_vel+=0.5f;
+		}
+		if(r<0 || r>1){
+			r_vel*=-1;
+		}
+		if(g<0 || g>1){
+			g_vel*=-1;
+		}
+		if(b<0 || b>1){
+			b_vel*=-1;
+		}
 		System.out.println(xVelocity);
 		
 	}
