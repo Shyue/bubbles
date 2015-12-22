@@ -20,11 +20,11 @@ public class Bubbles extends ApplicationAdapter {
 	//	batch = new SpriteBatch();
 		Gdx.app.log("AssetPath", Gdx.files.internal("assets/bubble.jpg").file().getAbsolutePath());
 		//img = new Texture("badlogic.jpg");
-		for(int i = 0; i<20; i++){
+		for(int i = 0; i<BUBBLE_NUMBER; i++){
 			b[i] = new Bubble();
 			stage.addActor(b[i]);
 		}
-		
+        Gdx.input.setInputProcessor(stage);
 		
 	}
 

@@ -1,9 +1,13 @@
 package edu.mbhs.cs.bubbles;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 public class Bubble extends Actor{
 	private float x = 0;
@@ -27,6 +31,8 @@ public class Bubble extends Actor{
 		r_vel = 0.5f;
 		g_vel = 0.5f;
 		b_vel=0.5f;
+		this.setVisible(true);
+		
 	}
 	
 	@Override
@@ -63,21 +69,67 @@ public class Bubble extends Actor{
 			g_vel+=0.5f;
 			b_vel+=0.5f;
 		}
-		if(r<0 || r>1){
-			r_vel*=-1;
-		}
-		if(g<0 || g>1){
-			g_vel*=-1;
-		}
-		if(b<0 || b>1){
-			b_vel*=-1;
-		}
-		System.out.println(xVelocity);
+		if(r<0)r_vel = 0.5f;
+		if(r>1)r_vel = -0.5f;
+		if(g<0)g_vel = 0.5f;
+		if(g>1)g_vel = -0.5f;
+		if(b<0)b_vel = 0.5f;
+		if(b>1)b_vel = -0.5f;
+		//System.out.println(xVelocity);
 		
 	}
+	public float getR() {
+		return r;
+	}
+
+	public float getG() {
+		return g;
+	}
+
+	public float getB() {
+		return b;
+	}
+
+	public float getR_vel() {
+		return r_vel;
+	}
+
+	public float getG_vel() {
+		return g_vel;
+	}
+
+	public float getB_vel() {
+		return b_vel;
+	}
+
+	public void setR(float r) {
+		this.r = r;
+	}
+
+	public void setG(float g) {
+		this.g = g;
+	}
+
+	public void setB(float b) {
+		this.b = b;
+	}
+
+	public void setR_vel(float r_vel) {
+		this.r_vel = r_vel;
+	}
+
+	public void setG_vel(float g_vel) {
+		this.g_vel = g_vel;
+	}
+
+	public void setB_vel(float b_vel) {
+		this.b_vel = b_vel;
+	}
+
 	public void draw(Batch batch, float alpha){
-		batch.setColor(r,g,b,0.3f);
+		batch.setColor(new Color(r,g,b,0.3f));
+		//batch.setColor(r,g,b,1f);
 		batch.draw(texture, x, y, radius*2,radius*2);
-		
 	}
+	
 }
