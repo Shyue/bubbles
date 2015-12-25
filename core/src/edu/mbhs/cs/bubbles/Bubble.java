@@ -1,6 +1,7 @@
 package edu.mbhs.cs.bubbles;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -16,6 +17,7 @@ public class Bubble extends Actor {
 	private int radius = 64;	//pic size
 	private float r, g, b;	//color floats
 	private float r_vel, g_vel, b_vel;	//color velocities
+	private static float TRANSPARENCY = 0.3f;
 	
 	Texture texture = new Texture(Gdx.files.internal("bubble.png"));
 
@@ -90,7 +92,7 @@ public class Bubble extends Actor {
 
 	@Override
 	public void draw(Batch batch, float alpha){
-		batch.setColor(r, g, b, 0.3f);
+		batch.setColor(new Color(r, g, b, TRANSPARENCY));
 		batch.draw(texture, x, y, radius * 2, radius * 2);
 	}
 }
