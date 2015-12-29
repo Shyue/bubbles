@@ -17,13 +17,13 @@ public class Bubble extends Actor {
 	private int radius = 64;	//pic size
 	private float r, g, b;	//color floats
 	private float r_vel, g_vel, b_vel;	//color velocities
-	private static float TRANSPARENCY = 0.3f;
+	private static final float TRANSPARENCY = 0.3f;
 	
 	Texture texture = new Texture(Gdx.files.internal("bubble.png"));
 
 	/**
-	 * Places ball at bottom left corner, gives it a radius of 64, gives it a random x and y velocity between 0 and 10,
-	 * sets rgb values to random values between 0 and 1, and sets rgb "velocities" to 0.5
+	 * Places bubble at bottom left corner, gives it a radius of 64, gives it a random x and y velocity
+	 * between 0 and 10, sets rgb values to random values between 0 and 1, and sets rgb "velocities" to 0.5
 	 */
 	public Bubble(){
 		this.setBounds(x, y, radius * 2, radius * 2);
@@ -40,43 +40,43 @@ public class Bubble extends Actor {
 	
 	@Override
 	public void act(float delta){
+		move(delta);
+		changeMotionVelocities(delta);
+		changeColor(delta);
+		changeColorVelocities(delta);
+
+		System.out.println(xVelocity);
+	}
+
+	/**
+	 * Moves the bubble in the x and y directions by its x and y velocities multiplied by delta
+	 * and reverses the direction the bubble is moving in if it hits a boundary
+	 * @param delta amount of "time" since last movement
+	 */
+	private void move(float delta) {
 		x += xVelocity * delta;
 		y += yVelocity * delta;
+
+		// if on edge, bounce
+		if(x >= this.getStage().getWidth() - 140 || x <= 0){
+			xVelocity *= -1;
+		}
+		if(y >= this.getStage().getHeight() - 170 || y <= 0){
+			yVelocity *= -1;
+		}
+	}
+
+	/**
+	 * Changes the color of the bubble by the color velocities multiplied by delta
+	 * and reverses the "direction" of the color change if it hits the boundaries of 0 or 255
+	 * @param delta amount of "time" since last color change
+	 */
+	private void changeColor(float delta) {
 		r += r_vel * delta;
 		g += g_vel * delta;
 		b += b_vel * delta;
 
-		if(x >= this.getStage().getWidth() - 140 || x <= 0){
-			if(x <= 0){
-				xVelocity = Math.abs(xVelocity);
-			}
-			else{
-				xVelocity = -Math.abs(xVelocity);
-			}
-		}
-		if(y >= this.getStage().getHeight() - 170 || y <= 0){
-			if(y <= 0){
-				yVelocity = Math.abs(yVelocity);
-			}
-			else{
-				yVelocity = -Math.abs(yVelocity);
-			}
-		}
-
-		// TODO: somebody make a method
-		xVelocity += 200 * Math.pow(1 - Math.random(), 3) * delta;
-		yVelocity += 200 * Math.pow(1 - Math.random(), 3) * delta;
-
-		r_vel += Math.pow(1 - Math.random(), 3) * delta;
-		g_vel += Math.pow(1 - Math.random(), 3) * delta;
-		b_vel += Math.pow(1 - Math.random(), 3) * delta;
-
-		if(r + g + b < 1){
-			r_vel += 0.5f;
-			g_vel += 0.5f;
-			b_vel += 0.5f;
-		}
-
+		// keeping ourselves between 0 and 1
 		if(r < 0 || r > 1){
 			r_vel *= -1;
 		}
@@ -86,8 +86,31 @@ public class Bubble extends Actor {
 		if(b < 0 || b > 1){
 			b_vel *= -1;
 		}
+	}
 
-		System.out.println(xVelocity);
+	/**
+	 * Changes the color velocities by a random number multiplied by delta
+	 * @param delta the amount of "time" since last color velocity change
+	 */
+	private void changeColorVelocities(float delta) {
+		r_vel += Math.pow(1 - Math.random(), 3) * delta;
+		g_vel += Math.pow(1 - Math.random(), 3) * delta;
+		b_vel += Math.pow(1 - Math.random(), 3) * delta;
+
+		if(r + g + b < 1){
+			r_vel += 0.5f;
+			g_vel += 0.5f;
+			b_vel += 0.5f;
+		}
+	}
+
+	/**
+	 * Changes the x and y velocities by a random number multiplied by delta
+	 * @param delta the amount of "time" since last x-y velocity change
+	 */
+	private void changeMotionVelocities(float delta) {
+		xVelocity += 200 * Math.pow(1 - Math.random(), 3) * delta;
+		yVelocity += 200 * Math.pow(1 - Math.random(), 3) * delta;
 	}
 
 	@Override
