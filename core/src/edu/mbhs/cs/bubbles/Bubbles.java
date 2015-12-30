@@ -21,6 +21,7 @@ public class Bubbles extends ApplicationAdapter {
 			b[i] = new Bubble();
 			stage.addActor(b[i]);
 		}
+		stage.addActor(new Player());
 	}
 
 	@Override
