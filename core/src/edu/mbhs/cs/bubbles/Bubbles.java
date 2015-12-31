@@ -16,7 +16,6 @@ public class Bubbles extends ApplicationAdapter {
 	@Override
 	public void create () {
 		stage = new Stage();
-		Gdx.app.log("AssetPath", Gdx.files.internal("assets/bubble.jpg").file().getAbsolutePath());
 		for(int i = 0; i < 20; i++){
 			b[i] = new Bubble();
 			stage.addActor(b[i]);

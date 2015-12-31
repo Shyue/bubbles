@@ -44,8 +44,6 @@ public class Bubble extends Actor {
 		changeMotionVelocities(delta);
 		changeColor(delta);
 		changeColorVelocities(delta);
-
-		System.out.println(xVelocity);
 	}
 
 	/**
@@ -59,10 +57,20 @@ public class Bubble extends Actor {
 
 		// if on edge, bounce
 		if(x >= this.getStage().getWidth() - 140 || x <= 0){
-			xVelocity *= -1;
+			if(x<=0){
+				xVelocity = Math.abs(xVelocity);
+			}
+			else{
+				xVelocity = -Math.abs(xVelocity);
+			}
 		}
 		if(y >= this.getStage().getHeight() - 170 || y <= 0){
-			yVelocity *= -1;
+			if(y<=0){
+				yVelocity = Math.abs(yVelocity);
+			}
+			else{
+				yVelocity = -Math.abs(yVelocity);
+			}
 		}
 	}
 
@@ -77,15 +85,6 @@ public class Bubble extends Actor {
 		b += b_vel * delta;
 
 		// keeping ourselves between 0 and 1
-		if(r < 0 || r > 1){
-			r_vel *= -1;
-		}
-		if(g < 0 || g > 1){
-			g_vel *= -1;
-		}
-		if(b < 0 || b > 1){
-			b_vel *= -1;
-		}
 	}
 
 	/**
@@ -96,12 +95,25 @@ public class Bubble extends Actor {
 		r_vel += Math.pow(1 - Math.random(), 3) * delta;
 		g_vel += Math.pow(1 - Math.random(), 3) * delta;
 		b_vel += Math.pow(1 - Math.random(), 3) * delta;
-
+		
+		
+		
 		if(r + g + b < 1){
 			r_vel += 0.5f;
 			g_vel += 0.5f;
 			b_vel += 0.5f;
 		}
+		if(r < 0)	r_vel = Math.abs(r_vel);
+		if(r > 1)	r_vel = -Math.abs(r_vel);
+		if(g < 0)	g_vel = Math.abs(g_vel);
+		if(g > 1)	g_vel = -Math.abs(g_vel);
+		if(b < 0)	b_vel = Math.abs(b_vel);
+		if(b > 1)	b_vel = -Math.abs(b_vel);
+		
+		if(r_vel > 3.4f)	r_vel -= 0.5f;
+		if(g_vel > 3.4f)	g_vel -= 0.5f;
+		if(b_vel > 3.4f)	b_vel -= 0.5f;
+		
 	}
 
 	/**
