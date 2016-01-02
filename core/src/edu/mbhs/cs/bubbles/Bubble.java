@@ -6,10 +6,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import java.util.ArrayList;
+
 /**
  * Class representing the bubbles bouncing around the screen.
  */
 public class Bubble extends Actor {
+
 	private float x = 0;
 	private float y = 0;
 	private float xVelocity;
@@ -17,7 +20,10 @@ public class Bubble extends Actor {
 	private int radius = 64;	//pic size
 	private float r, g, b;	//color floats
 	private float r_vel, g_vel, b_vel;	//color velocities
+	private boolean activated;
+
 	private static final float TRANSPARENCY = 0.3f;
+	private static ArrayList<Bubble> bubbles = new ArrayList<Bubble>();
 	
 	Texture texture = new Texture(Gdx.files.internal("bubble.png"));
 
@@ -36,16 +42,28 @@ public class Bubble extends Actor {
 		r_vel = 0.5f;
 		g_vel = 0.5f;
 		b_vel = 0.5f;
+		activated = false;
+		bubbles.add(this);
 	}
 	
 	@Override
 	public void act(float delta){
+		checkIfCanActivate();
 		move(delta);
 		changeMotionVelocities(delta);
 		changeColor(delta);
 		changeColorVelocities(delta);
+	}
 
-		System.out.println(xVelocity);
+	/**
+	 * Checks if the bubble can be activated if it is currently inactive
+	 */
+	private void checkIfCanActivate() {
+		if (activated) return;
+		for (Bubble b : bubbles) {
+			if (b != this && overlaps(b)) return;
+		}
+		activated = true;
 	}
 
 	/**
@@ -109,6 +127,16 @@ public class Bubble extends Actor {
 	 * @param delta the amount of "time" since last x-y velocity change
 	 */
 	private void changeMotionVelocities(float delta) {
+		// if it's touching another bubble, bounce
+		for (Bubble b : bubbles) {
+			if (b != this && overlaps(b) && activated && b.activated) {
+				float tmp1 = xVelocity, tmp2 = yVelocity;
+				xVelocity = b.xVelocity; yVelocity = b.yVelocity;
+				b.xVelocity = tmp1; b.yVelocity = tmp2;
+				return;
+			}
+		}
+
 		xVelocity += 200 * Math.pow(1 - Math.random(), 3) * delta;
 		yVelocity += 200 * Math.pow(1 - Math.random(), 3) * delta;
 	}
@@ -117,5 +145,15 @@ public class Bubble extends Actor {
 	public void draw(Batch batch, float alpha){
 		batch.setColor(new Color(r, g, b, TRANSPARENCY));
 		batch.draw(texture, x, y, radius * 2, radius * 2);
+	}
+
+	/**
+	 * Returns whether this bubble overlaps with the specified bubble
+	 * @param other the specified bubble
+	 * @return true if this bubble is overlapping or touching other
+	 */
+	private boolean overlaps(Bubble other) {
+		double distance = Math.sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
+		return radius + other.radius >= distance;
 	}
 }
