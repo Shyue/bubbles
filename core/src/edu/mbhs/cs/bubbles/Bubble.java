@@ -1,27 +1,38 @@
 package edu.mbhs.cs.bubbles;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-
-import java.util.ArrayList;
 
 /**
  * Class representing the bubbles bouncing around the screen.
  */
 public class Bubble extends Actor {
 
-	private float x = 0;
-	private float y = 0;
-	private float xVelocity;
-	private float yVelocity;
-	private int radius = 64;	//pic size
+	private float x = 10;
+	private float y = 10;
+	private static final float MAXIMUM_VELOCITY = 500;
+	private Body body;
+	public Body getBody() {
+		return body;
+	}
+
+	private float radius = 8f;	//pic size
 	private float r, g, b;	//color floats
 	private float r_vel, g_vel, b_vel;	//color velocities
 	private boolean activated;
-
+	public static final float PIXELS_TO_METERS = 8f;
 	private static final float TRANSPARENCY = 0.3f;
 	private static ArrayList<Bubble> bubbles = new ArrayList<Bubble>();
 
@@ -31,26 +42,38 @@ public class Bubble extends Actor {
 	 * Places bubble at bottom left corner, gives it a radius of 64, gives it a random x and y velocity
 	 * between 0 and 10, sets rgb values to random values between 0 and 1, and sets rgb "velocities" to 0.5
 	 */
-	public Bubble(){
-		this.setBounds(x, y, radius * 2, radius * 2);
+	public Bubble(World w, float maxWidth, float maxHeight){
+		System.out.println(x + " " + y + " " + maxWidth + " " + maxHeight);
+		this.setBounds(x, y, radius * 2 / PIXELS_TO_METERS, radius * 2 / PIXELS_TO_METERS);
 		//This is a TERRIBLE way of doing things
 		r = (float)Math.pow(Math.random(), 1.0 / 5);
 		g = (float)Math.pow(Math.random(), 1.0 / 5);
 		b = (float)Math.pow(Math.random(), 1.0 / 5);
-		xVelocity = (float)Math.random() * 10;
-		yVelocity = (float)Math.random() * 10;
 		r_vel = 0.5f;
 		g_vel = 0.5f;
 		b_vel = 0.5f;
 		activated = false;
 		bubbles.add(this);
+		BodyDef bodyDef = new BodyDef();
+	    bodyDef.type = BodyDef.BodyType.DynamicBody;
+	    bodyDef.position.set(x/PIXELS_TO_METERS, y/PIXELS_TO_METERS);
+	    body = w.createBody(bodyDef);
+	    
+	    CircleShape shape = new CircleShape();
+	    shape.setRadius(radius);
+	    FixtureDef def = new FixtureDef();
+	    def.shape = shape;
+	    def.density = 0.1f;
+	    body.createFixture(def);
+	    shape.dispose();
+	    
+	    
 	}
 
 	@Override
 	public void act(float delta){
 		checkIfCanActivate();
-		move(delta);
-		changeMotionVelocities(delta);
+		move();
 		changeColor(delta);
 		changeColorVelocities(delta);
 	}
@@ -67,31 +90,21 @@ public class Bubble extends Actor {
 	}
 
 	/**
-	 * Moves the bubble in the x and y directions by its x and y velocities multiplied by delta
-	 * and reverses the direction the bubble is moving in if it hits a boundary
-	 * @param delta amount of "time" since last movement
+	 * Do physics
+	 * 
 	 */
-	private void move(float delta) {
-		x += xVelocity * delta;
-		y += yVelocity * delta;
+	private void move() {
+		body.applyForceToCenter(new Vector2((float)(1-2*Math.random())*(MAXIMUM_VELOCITY - body.getLinearVelocity().x),
+				(float)(1-2*Math.random())*(MAXIMUM_VELOCITY - body.getLinearVelocity().y)), true);
+		this.setX(body.getPosition().x * PIXELS_TO_METERS);
+		this.setY(body.getPosition().y * PIXELS_TO_METERS);
+		//System.out.println(getSpeed());
+	}
 
-		// if on edge, bounce
-		if(x >= this.getStage().getWidth() - 140 || x <= 0){
-			if(x <= 0){
-				xVelocity = Math.abs(xVelocity);
-			}
-			else{
-				xVelocity = -Math.abs(xVelocity);
-			}
-		}
-		if(y >= this.getStage().getHeight() - 170 || y <= 0){
-			if(y <= 0){
-				yVelocity = Math.abs(yVelocity);
-			}
-			else{
-				yVelocity = -Math.abs(yVelocity);
-			}
-		}
+	private float getSpeed() {
+		// TODO Auto-generated method stub
+		Vector2 velocity = getBody().getLinearVelocity();
+		return (float)Math.sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
 	}
 
 	/**
@@ -135,29 +148,12 @@ public class Bubble extends Actor {
 
 	}
 
-	/**
-	 * Changes the x and y velocities by a random number multiplied by delta
-	 * @param delta the amount of "time" since last x-y velocity change
-	 */
-	private void changeMotionVelocities(float delta) {
-		// if it's touching another bubble, bounce
-		for (Bubble b : bubbles) {
-			if (b != this && overlaps(b) && activated && b.activated) {
-				float tmp1 = xVelocity, tmp2 = yVelocity;
-				xVelocity = b.xVelocity; yVelocity = b.yVelocity;
-				b.xVelocity = tmp1; b.yVelocity = tmp2;
-				return;
-			}
-		}
-
-		xVelocity += 200 * Math.pow(1 - Math.random(), 3) * delta;
-		yVelocity += 200 * Math.pow(1 - Math.random(), 3) * delta;
-	}
+	
 
 	@Override
 	public void draw(Batch batch, float alpha){
 		batch.setColor(new Color(r, g, b, TRANSPARENCY));
-		batch.draw(texture, x, y, radius * 2, radius * 2);
+		batch.draw(texture, body.getPosition().x * PIXELS_TO_METERS, body.getPosition().y * PIXELS_TO_METERS, radius * 2 * PIXELS_TO_METERS, radius * 2 * PIXELS_TO_METERS);
 	}
 
 	/**
@@ -167,6 +163,6 @@ public class Bubble extends Actor {
 	 */
 	private boolean overlaps(Bubble other) {
 		double distance = Math.sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
-		return radius + other.radius >= distance;
+		return radius + other.radius >= distance+1;
 	}
 }
