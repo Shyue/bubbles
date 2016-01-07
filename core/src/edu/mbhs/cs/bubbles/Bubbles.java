@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
  * Main Application: Bubbles Game
  */
 public class Bubbles extends ApplicationAdapter {
-	private static int BUBBLE_NUMBER = 20;
+	private static int BUBBLE_NUMBER = 10;
 	private Bubble[] b = new Bubble[BUBBLE_NUMBER];
 	private Stage stage;
 	private World world;
@@ -36,8 +36,8 @@ public class Bubbles extends ApplicationAdapter {
 		stage.addActor(new Player());
 		
 		//this edge detection doesn't work somebody fix it
-		float with = Gdx.graphics.getWidth()/Bubble.PIXELS_TO_METERS;
-        float hite = Gdx.graphics.getHeight()/Bubble.PIXELS_TO_METERS;
+		float with = Gdx.graphics.getWidth()/Bubble.METERS_TO_PIXELS;
+        float hite = Gdx.graphics.getHeight()/Bubble.METERS_TO_PIXELS;
 	    BodyDef bottom = new BodyDef();
 	    bottom.type = BodyDef.BodyType.StaticBody;
 	    bottom.position.set(0,0);
@@ -50,7 +50,7 @@ public class Bubbles extends ApplicationAdapter {
 	    
 	    BodyDef top = new BodyDef();
 	    top.type = BodyDef.BodyType.StaticBody;
-	    top.position.set(0, stage.getHeight() / Bubble.PIXELS_TO_METERS);
+	    top.position.set(0, stage.getHeight() / Bubble.METERS_TO_PIXELS);
 	    FixtureDef tip = new FixtureDef();
 	    EdgeShape tup = new EdgeShape();
 	    tup.set(new Vector2(-with, 0), new Vector2(with, 0));
@@ -70,7 +70,7 @@ public class Bubbles extends ApplicationAdapter {
 	    
 	    BodyDef right = new BodyDef();
 	    right.type = BodyDef.BodyType.StaticBody;
-	    right.position.set(stage.getWidth() / Bubble.PIXELS_TO_METERS,0);
+	    right.position.set(stage.getWidth() / Bubble.METERS_TO_PIXELS,0);
 	    FixtureDef rot = new FixtureDef();
 	    EdgeShape rut = new EdgeShape();
 	    rut.set(new Vector2(0, -hite), new Vector2(0, hite));

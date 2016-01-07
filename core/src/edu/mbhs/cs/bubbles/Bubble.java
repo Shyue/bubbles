@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -32,7 +31,7 @@ public class Bubble extends Actor {
 	private float r, g, b;	//color floats
 	private float r_vel, g_vel, b_vel;	//color velocities
 	private boolean activated;
-	public static final float PIXELS_TO_METERS = 8f;
+	public static final float METERS_TO_PIXELS = 8f;
 	private static final float TRANSPARENCY = 0.3f;
 	private static ArrayList<Bubble> bubbles = new ArrayList<Bubble>();
 
@@ -44,7 +43,7 @@ public class Bubble extends Actor {
 	 */
 	public Bubble(World w, float maxWidth, float maxHeight){
 		System.out.println(x + " " + y + " " + maxWidth + " " + maxHeight);
-		this.setBounds(x, y, radius * 2 / PIXELS_TO_METERS, radius * 2 / PIXELS_TO_METERS);
+		this.setBounds(x, y, radius * 2 / METERS_TO_PIXELS, radius * 2 / METERS_TO_PIXELS);
 		//This is a TERRIBLE way of doing things
 		r = (float)Math.pow(Math.random(), 1.0 / 5);
 		g = (float)Math.pow(Math.random(), 1.0 / 5);
@@ -56,7 +55,7 @@ public class Bubble extends Actor {
 		bubbles.add(this);
 		BodyDef bodyDef = new BodyDef();
 	    bodyDef.type = BodyDef.BodyType.DynamicBody;
-	    bodyDef.position.set(x/PIXELS_TO_METERS, y/PIXELS_TO_METERS);
+	    bodyDef.position.set(x/ METERS_TO_PIXELS, y/ METERS_TO_PIXELS);
 	    body = w.createBody(bodyDef);
 	    
 	    CircleShape shape = new CircleShape();
@@ -96,8 +95,8 @@ public class Bubble extends Actor {
 	private void move() {
 		body.applyForceToCenter(new Vector2((float)(1-2*Math.random())*(MAXIMUM_VELOCITY - body.getLinearVelocity().x),
 				(float)(1-2*Math.random())*(MAXIMUM_VELOCITY - body.getLinearVelocity().y)), true);
-		this.setX(body.getPosition().x * PIXELS_TO_METERS);
-		this.setY(body.getPosition().y * PIXELS_TO_METERS);
+		this.setX(body.getPosition().x * METERS_TO_PIXELS);
+		this.setY(body.getPosition().y * METERS_TO_PIXELS);
 		//System.out.println(getSpeed());
 	}
 
@@ -153,7 +152,7 @@ public class Bubble extends Actor {
 	@Override
 	public void draw(Batch batch, float alpha){
 		batch.setColor(new Color(r, g, b, TRANSPARENCY));
-		batch.draw(texture, body.getPosition().x * PIXELS_TO_METERS, body.getPosition().y * PIXELS_TO_METERS, radius * 2 * PIXELS_TO_METERS, radius * 2 * PIXELS_TO_METERS);
+		batch.draw(texture, body.getPosition().x * METERS_TO_PIXELS, body.getPosition().y * METERS_TO_PIXELS, radius * 2 * METERS_TO_PIXELS, radius * 2 * METERS_TO_PIXELS);
 	}
 
 	/**
