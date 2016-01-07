@@ -43,7 +43,7 @@ public class Bubbles extends ApplicationAdapter {
 	    bottom.position.set(0,0);
 	    FixtureDef bot = new FixtureDef();
 	    EdgeShape but = new EdgeShape();
-	    but.set(new Vector2(-with/2, 0), new Vector2(with/2, 0));
+	    but.set(new Vector2(-with, 0), new Vector2(with, 0));
 	    bot.shape = but;
 	    Body botEdge = world.createBody(bottom);
 	    botEdge.createFixture(bot);
@@ -53,27 +53,27 @@ public class Bubbles extends ApplicationAdapter {
 	    top.position.set(0, stage.getHeight() / Bubble.PIXELS_TO_METERS);
 	    FixtureDef tip = new FixtureDef();
 	    EdgeShape tup = new EdgeShape();
-	    tup.set(new Vector2(-with/2, 0), new Vector2(with/2, 0));
+	    tup.set(new Vector2(-with, 0), new Vector2(with, 0));
 	    tip.shape = tup;
 	    Body topEdge = world.createBody(top);
 	    topEdge.createFixture(tip);
 	    
 	    BodyDef left = new BodyDef();
-	    top.type = BodyDef.BodyType.StaticBody;
-	    top.position.set(0, 0);
+	    left.type = BodyDef.BodyType.StaticBody;
+	    left.position.set(0, 0);
 	    FixtureDef lift = new FixtureDef();
 	    EdgeShape luft = new EdgeShape();
-	    luft.set(new Vector2(0, -hite/2), new Vector2(0, hite));
+	    luft.set(new Vector2(0, -hite), new Vector2(0, hite));
 	    lift.shape = luft;
 	    Body leftEdge = world.createBody(left);
 	    leftEdge.createFixture(lift);
 	    
 	    BodyDef right = new BodyDef();
-	    top.type = BodyDef.BodyType.StaticBody;
-	    top.position.set(0, stage.getWidth() / Bubble.PIXELS_TO_METERS);
+	    right.type = BodyDef.BodyType.StaticBody;
+	    right.position.set(stage.getWidth() / Bubble.PIXELS_TO_METERS,0);
 	    FixtureDef rot = new FixtureDef();
 	    EdgeShape rut = new EdgeShape();
-	    rut.set(new Vector2(0, -hite/2), new Vector2(0, hite/2));
+	    rut.set(new Vector2(0, -hite), new Vector2(0, hite));
 	    rot.shape = rut;
 	    Body rightEdge = world.createBody(right);
 	    rightEdge.createFixture(rot);
