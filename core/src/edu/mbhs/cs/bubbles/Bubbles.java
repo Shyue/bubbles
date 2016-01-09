@@ -3,6 +3,7 @@ package edu.mbhs.cs.bubbles;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -15,11 +16,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
  * Main Application: Bubbles Game
  */
 public class Bubbles extends ApplicationAdapter {
-	private static int BUBBLE_NUMBER = 10;
+	private static int BUBBLE_NUMBER = 5;
 	private Bubble[] b = new Bubble[BUBBLE_NUMBER];
 	private Stage stage;
 	private World world;
-	
+	private OrthographicCamera cam;
 
 	@Override
 	public void create () {
@@ -28,13 +29,14 @@ public class Bubbles extends ApplicationAdapter {
 		Gdx.app.log("AssetPath", Gdx.files.internal("assets/bubble.jpg").file().getAbsolutePath());
 		for(int i = 0; i < BUBBLE_NUMBER; i++){
 			b[i] = new Bubble(world, stage.getWidth(), stage.getHeight());
-			
+
 			stage.addActor(b[i]);
 		}
 		//b[0] = new Bubble(world);
 		//stage.addActor(b[0]);
-		stage.addActor(new Player());
-		
+		stage.addActor(new Player(world, stage.getWidth(), stage.getHeight()));
+
+
 		//this edge detection doesn't work somebody fix it
 		float with = Gdx.graphics.getWidth()/Bubble.METERS_TO_PIXELS;
         float hite = Gdx.graphics.getHeight()/Bubble.METERS_TO_PIXELS;

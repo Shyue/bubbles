@@ -7,11 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /**
@@ -21,7 +17,7 @@ public class Bubble extends Actor {
 
 	private float x = 10;
 	private float y = 10;
-	private static final float MAXIMUM_VELOCITY = 500;
+	private static final float MAXIMUM_VELOCITY = 5000;
 	private Body body;
 	public Body getBody() {
 		return body;
@@ -42,8 +38,8 @@ public class Bubble extends Actor {
 	 * between 0 and 10, sets rgb values to random values between 0 and 1, and sets rgb "velocities" to 0.5
 	 */
 	public Bubble(World w, float maxWidth, float maxHeight){
-		System.out.println(x + " " + y + " " + maxWidth + " " + maxHeight);
-		this.setBounds(x, y, radius * 2 / METERS_TO_PIXELS, radius * 2 / METERS_TO_PIXELS);
+		//System.out.println(x + " " + y + " " + maxWidth + " " + maxHeight);
+		//this.setBounds(x, y, radius * 2 / METERS_TO_PIXELS, radius * 2 / METERS_TO_PIXELS);
 		//This is a TERRIBLE way of doing things
 		r = (float)Math.pow(Math.random(), 1.0 / 5);
 		g = (float)Math.pow(Math.random(), 1.0 / 5);
@@ -63,7 +59,7 @@ public class Bubble extends Actor {
 	    FixtureDef def = new FixtureDef();
 	    def.shape = shape;
 	    def.density = 0.1f;
-	    body.createFixture(def);
+	    Fixture fixture = body.createFixture(def);
 	    shape.dispose();
 	    
 	    
@@ -71,7 +67,7 @@ public class Bubble extends Actor {
 
 	@Override
 	public void act(float delta){
-		checkIfCanActivate();
+		//checkIfCanActivate();
 		move();
 		changeColor(delta);
 		changeColorVelocities(delta);
@@ -80,13 +76,14 @@ public class Bubble extends Actor {
 	/**
 	 * Checks if the bubble can be activated if it is currently inactive
 	 */
+	/**
 	private void checkIfCanActivate() {
 		if (activated) return;
 		for (Bubble b : bubbles) {
 			if (b != this && overlaps(b)) return;
 		}
 		activated = true;
-	}
+	}**/
 
 	/**
 	 * Do physics
@@ -95,16 +92,17 @@ public class Bubble extends Actor {
 	private void move() {
 		body.applyForceToCenter(new Vector2((float)(1-2*Math.random())*(MAXIMUM_VELOCITY - body.getLinearVelocity().x),
 				(float)(1-2*Math.random())*(MAXIMUM_VELOCITY - body.getLinearVelocity().y)), true);
-		this.setX(body.getPosition().x * METERS_TO_PIXELS);
-		this.setY(body.getPosition().y * METERS_TO_PIXELS);
+		//this.setX(body.getPosition().x * METERS_TO_PIXELS);
+		//this.setY(body.getPosition().y * METERS_TO_PIXELS);
 		//System.out.println(getSpeed());
 	}
 
+	/**
 	private float getSpeed() {
 		// TODO Auto-generated method stub
 		Vector2 velocity = getBody().getLinearVelocity();
 		return (float)Math.sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
-	}
+	}**/
 
 	/**
 	 * Changes the color of the bubble by the color velocities multiplied by delta
@@ -153,6 +151,7 @@ public class Bubble extends Actor {
 	public void draw(Batch batch, float alpha){
 		batch.setColor(new Color(r, g, b, TRANSPARENCY));
 		batch.draw(texture, body.getPosition().x * METERS_TO_PIXELS, body.getPosition().y * METERS_TO_PIXELS, radius * 2 * METERS_TO_PIXELS, radius * 2 * METERS_TO_PIXELS);
+		//batch.draw(texture, body.getPosition().x, body.getPosition().y, radius * 2, radius * 2);
 	}
 
 	/**
@@ -160,8 +159,9 @@ public class Bubble extends Actor {
 	 * @param other the specified bubble
 	 * @return true if this bubble is overlapping or touching other
 	 */
+	/**
 	private boolean overlaps(Bubble other) {
 		double distance = Math.sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
 		return radius + other.radius >= distance+1;
-	}
+	}**/
 }
