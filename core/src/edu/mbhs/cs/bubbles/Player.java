@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import java.util.LinkedList;
+
 /**
  * Class representing the player, a small circle in the sea of bubbles
  */
@@ -49,7 +51,11 @@ public class Player extends Actor {
 		FixtureDef def = new FixtureDef();
 		def.shape = shape;
 		def.density = 0.1f;
+		def.restitution = 1;
 		Fixture fixture = body.createFixture(def);
+		LinkedList<String> holder = new LinkedList();
+		holder.add("Player"); holder.add(body.getPosition().x+""); holder.add(body.getPosition().y+"");
+		fixture.setUserData(holder);
 		shape.dispose();
 
 	}

@@ -1,6 +1,7 @@
 package edu.mbhs.cs.bubbles;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -59,8 +60,12 @@ public class Bubble extends Actor {
 	    FixtureDef def = new FixtureDef();
 	    def.shape = shape;
 	    def.density = 0.1f;
+		def.restitution = 1;
 	    Fixture fixture = body.createFixture(def);
-	    shape.dispose();
+		LinkedList<String> holder = new LinkedList();
+		holder.add("Bubble"); holder.add(body.getPosition().x+""); holder.add(body.getPosition().y+"");
+		fixture.setUserData(holder);
+		shape.dispose();
 	    
 	    
 	}
