@@ -28,6 +28,7 @@ public class Bubble extends Actor {
 	private float r, g, b;	//color floats
 	private float r_vel, g_vel, b_vel;	//color velocities
 	private boolean activated;
+	private Fixture fixture;
 	public static final float METERS_TO_PIXELS = 8f;
 	private static final float TRANSPARENCY = 0.3f;
 	private static ArrayList<Bubble> bubbles = new ArrayList<Bubble>();
@@ -60,8 +61,8 @@ public class Bubble extends Actor {
 	    FixtureDef def = new FixtureDef();
 	    def.shape = shape;
 	    def.density = 0.1f;
-		def.restitution = 1;
-	    Fixture fixture = body.createFixture(def);
+		def.restitution = 0.5f;
+	    fixture = body.createFixture(def);
 		LinkedList<String> holder = new LinkedList();
 		holder.add("Bubble"); holder.add(body.getPosition().x+""); holder.add(body.getPosition().y+"");
 		fixture.setUserData(holder);
@@ -73,6 +74,7 @@ public class Bubble extends Actor {
 	@Override
 	public void act(float delta){
 		//checkIfCanActivate();
+
 		move();
 		changeColor(delta);
 		changeColorVelocities(delta);
@@ -97,6 +99,9 @@ public class Bubble extends Actor {
 	private void move() {
 		body.applyForceToCenter(new Vector2((float)(1-2*Math.random())*(MAXIMUM_VELOCITY - body.getLinearVelocity().x),
 				(float)(1-2*Math.random())*(MAXIMUM_VELOCITY - body.getLinearVelocity().y)), true);
+		LinkedList<String> holder = new LinkedList();
+		holder.add("Bubble"); holder.add(body.getPosition().x+""); holder.add(body.getPosition().y+"");
+		fixture.setUserData(holder);
 		//this.setX(body.getPosition().x * METERS_TO_PIXELS);
 		//this.setY(body.getPosition().y * METERS_TO_PIXELS);
 		//System.out.println(getSpeed());

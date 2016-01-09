@@ -15,11 +15,12 @@ import java.util.LinkedList;
  * Main Application: Bubbles Game
  */
 public class Bubbles extends ApplicationAdapter {
-	private static int BUBBLE_NUMBER = 5;
+	private static int BUBBLE_NUMBER = 3;
 	private Bubble[] b = new Bubble[BUBBLE_NUMBER];
 	private Stage stage;
 	private World world;
 	private OrthographicCamera cam;
+	private static float PUSH_SPEED = 500000;
 
 	@Override
 	public void create () {
@@ -100,9 +101,27 @@ public class Bubbles extends ApplicationAdapter {
 			@Override
 			public void beginContact(Contact contact) {
 
-				if (((LinkedList)contact.getFixtureA().getUserData()).get(0)=="Player" || ((LinkedList)contact.getFixtureB().getUserData()).get(0)=="Player"){
-					System.out.println(contact.getFixtureA().getUserData()+" "+contact.getFixtureB().getUserData());
+				if (((LinkedList)contact.getFixtureA().getUserData()).get(0)=="Player" && ((LinkedList)contact.getFixtureB().getUserData()).get(0)=="Bubble"){
+					//System.out.println(contact.getFixtureA().getUserData()+" "+contact.getFixtureB().getUserData());
+
+					contact.getFixtureA().getBody().applyForceToCenter(new Vector2(
+							PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(1))-Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(1)))
+							,
+							PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(2))-Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(2)))
+					), true);
+					System.out.println(PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(1))-Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(1)))+" "+PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(2))-Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(2))));
 				}
+				if (((LinkedList)contact.getFixtureB().getUserData()).get(0)=="Player" && ((LinkedList)contact.getFixtureA().getUserData()).get(0)=="Bubble"){
+					//System.out.println(contact.getFixtureA().getUserData()+" "+contact.getFixtureB().getUserData());
+
+					contact.getFixtureB().getBody().applyForceToCenter(new Vector2(
+							PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(1))-Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(1)))
+							,
+							PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(2))-Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(2)))
+					), true);
+					System.out.println(PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(1))-Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(1)))+" "+PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(2))-Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(2))));
+
+			}
 
 			}
 

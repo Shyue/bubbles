@@ -26,8 +26,9 @@ public class Player extends Actor {
 	public Body getBody(){
 		return body;
 	}
+	private Fixture fixture;
 	public static final float METERS_TO_PIXELS = 8f;
-	private static final float BASE_SPEED = 1000;
+	private static final float BASE_SPEED = 5000;
 	Texture texture = new Texture(Gdx.files.internal("player.png"));
 
 
@@ -51,8 +52,8 @@ public class Player extends Actor {
 		FixtureDef def = new FixtureDef();
 		def.shape = shape;
 		def.density = 0.1f;
-		def.restitution = 1;
-		Fixture fixture = body.createFixture(def);
+		def.restitution = 0.75f;
+		fixture = body.createFixture(def);
 		LinkedList<String> holder = new LinkedList();
 		holder.add("Player"); holder.add(body.getPosition().x+""); holder.add(body.getPosition().y+"");
 		fixture.setUserData(holder);
@@ -65,6 +66,9 @@ public class Player extends Actor {
 		//super.act(delta);
 		//x = getStage().getWidth() / 2;
 		//y = getStage().getHeight() / 2;
+		LinkedList<String> holder = new LinkedList();
+		holder.add("Player"); holder.add(body.getPosition().x+""); holder.add(body.getPosition().y+"");
+		fixture.setUserData(holder);
 		move();
 	}
 
