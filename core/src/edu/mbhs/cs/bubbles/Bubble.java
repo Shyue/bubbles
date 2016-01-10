@@ -29,7 +29,7 @@ public class Bubble extends Actor {
 	private float r_vel, g_vel, b_vel;	//color velocities
 	private boolean activated;
 	private Fixture fixture;
-	public static final float METERS_TO_PIXELS = 8f;
+	public static final float METERS_TO_PIXELS = 3f;
 	private static final float TRANSPARENCY = 0.3f;
 	private static ArrayList<Bubble> bubbles = new ArrayList<Bubble>();
 
@@ -55,7 +55,7 @@ public class Bubble extends Actor {
 	    bodyDef.type = BodyDef.BodyType.DynamicBody;
 	    bodyDef.position.set(x/ METERS_TO_PIXELS, y/ METERS_TO_PIXELS);
 	    body = w.createBody(bodyDef);
-	    
+
 	    CircleShape shape = new CircleShape();
 	    shape.setRadius(radius);
 	    FixtureDef def = new FixtureDef();
@@ -67,8 +67,8 @@ public class Bubble extends Actor {
 		holder.add("Bubble"); holder.add(body.getPosition().x+""); holder.add(body.getPosition().y+"");
 		fixture.setUserData(holder);
 		shape.dispose();
-	    
-	    
+
+
 	}
 
 	@Override
@@ -94,7 +94,7 @@ public class Bubble extends Actor {
 
 	/**
 	 * Do physics
-	 * 
+	 *
 	 */
 	private void move() {
 		body.applyForceToCenter(new Vector2((float)(1-2*Math.random())*(MAXIMUM_VELOCITY - body.getLinearVelocity().x),
@@ -155,7 +155,7 @@ public class Bubble extends Actor {
 
 	}
 
-	
+
 
 	@Override
 	public void draw(Batch batch, float alpha){

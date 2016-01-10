@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,12 +16,14 @@ import java.util.LinkedList;
  * Main Application: Bubbles Game
  */
 public class Bubbles extends ApplicationAdapter {
-	private static int BUBBLE_NUMBER = 3;
+	private static int BUBBLE_NUMBER = 15;
 	private Bubble[] b = new Bubble[BUBBLE_NUMBER];
 	private Stage stage;
 	private World world;
 	private OrthographicCamera cam;
-	private static float PUSH_SPEED = 500000;
+	private static float PUSH_SPEED = 10000;
+	private SpriteBatch batch;
+	Player p;
 
 	@Override
 	public void create () {
@@ -34,8 +37,19 @@ public class Bubbles extends ApplicationAdapter {
 		}
 		//b[0] = new Bubble(world);
 		//stage.addActor(b[0]);
-		stage.addActor(new Player(world, stage.getWidth(), stage.getHeight()));
+		p = new Player(world, stage.getWidth(), stage.getHeight());
+		stage.addActor(p);
 
+		//setting up the camera
+
+		float w = Gdx.graphics.getWidth();
+		float h = Gdx.graphics.getHeight();
+		cam = new OrthographicCamera(w/2, h/2);
+		System.out.println(w+" "+h);
+		cam.position.set(w/2, h/2 , 0);
+		cam.update();
+		batch = new SpriteBatch();
+		//stage.getViewport().setCamera(cam);
 
 		//this edge detection doesn't work somebody fix it
 		LinkedList<String> holder;
@@ -109,7 +123,7 @@ public class Bubbles extends ApplicationAdapter {
 							,
 							PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(2))-Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(2)))
 					), true);
-					System.out.println(PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(1))-Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(1)))+" "+PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(2))-Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(2))));
+					//System.out.println(PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(1))-Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(1)))+" "+PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(2))-Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(2))));
 				}
 				if (((LinkedList)contact.getFixtureB().getUserData()).get(0)=="Player" && ((LinkedList)contact.getFixtureA().getUserData()).get(0)=="Bubble"){
 					//System.out.println(contact.getFixtureA().getUserData()+" "+contact.getFixtureB().getUserData());
@@ -119,7 +133,7 @@ public class Bubbles extends ApplicationAdapter {
 							,
 							PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(2))-Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(2)))
 					), true);
-					System.out.println(PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(1))-Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(1)))+" "+PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(2))-Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(2))));
+					//System.out.println(PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(1))-Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(1)))+" "+PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(2))-Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(2))));
 
 			}
 
@@ -143,10 +157,24 @@ public class Bubbles extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+		updateCam();
+		cam.update();
+		batch.setProjectionMatrix(cam.combined);
+
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		world.step(1f/60f, 6, 2);
 		stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
+        //stage.draw();
+		batch.begin();
+		p.draw(batch, Gdx.graphics.getDeltaTime());
+		for (int i = 0; i<BUBBLE_NUMBER;i++){
+			b[i].draw(batch, Gdx.graphics.getDeltaTime());
+		}
+		batch.end();
+	}
+	public void updateCam(){
+		cam.position.set(p.getBody().getPosition().x * Bubble.METERS_TO_PIXELS, p.getBody().getPosition().y* Bubble.METERS_TO_PIXELS, 0);
+		//System.out.println(p.getBody().getPosition().x+" "+p.getBody().getPosition().y);
 	}
 }

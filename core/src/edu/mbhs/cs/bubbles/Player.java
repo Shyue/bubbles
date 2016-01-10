@@ -18,7 +18,7 @@ import java.util.LinkedList;
  */
 public class Player extends Actor {
 
-	private static final float RADIUS = 5f;
+	private static final float RADIUS = 8f;
 
 	private Color color;
 	private float x, y;
@@ -27,8 +27,8 @@ public class Player extends Actor {
 		return body;
 	}
 	private Fixture fixture;
-	public static final float METERS_TO_PIXELS = 8f;
-	private static final float BASE_SPEED = 5000;
+	public static final float METERS_TO_PIXELS = Bubble.METERS_TO_PIXELS;
+	private static final float BASE_SPEED = 3000;
 	Texture texture = new Texture(Gdx.files.internal("player.png"));
 
 
@@ -53,6 +53,8 @@ public class Player extends Actor {
 		def.shape = shape;
 		def.density = 0.1f;
 		def.restitution = 0.75f;
+		def.friction = 1000;
+
 		fixture = body.createFixture(def);
 		LinkedList<String> holder = new LinkedList();
 		holder.add("Player"); holder.add(body.getPosition().x+""); holder.add(body.getPosition().y+"");
@@ -66,6 +68,7 @@ public class Player extends Actor {
 		//super.act(delta);
 		//x = getStage().getWidth() / 2;
 		//y = getStage().getHeight() / 2;
+
 		LinkedList<String> holder = new LinkedList();
 		holder.add("Player"); holder.add(body.getPosition().x+""); holder.add(body.getPosition().y+"");
 		fixture.setUserData(holder);
