@@ -160,7 +160,7 @@ public class Bubble extends Actor {
 	@Override
 	public void draw(Batch batch, float alpha){
 		batch.setColor(new Color(r, g, b, TRANSPARENCY));
-		batch.draw(texture, body.getPosition().x * METERS_TO_PIXELS, body.getPosition().y * METERS_TO_PIXELS, radius * 2 * METERS_TO_PIXELS, radius * 2 * METERS_TO_PIXELS);
+		batch.draw(texture, (body.getPosition().x - radius) * METERS_TO_PIXELS , (body.getPosition().y - radius) * METERS_TO_PIXELS, radius * 2 * METERS_TO_PIXELS, radius * 2 * METERS_TO_PIXELS);
 		//batch.draw(texture, body.getPosition().x, body.getPosition().y, radius * 2, radius * 2);
 	}
 
