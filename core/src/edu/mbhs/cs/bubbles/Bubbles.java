@@ -4,6 +4,8 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -23,6 +25,7 @@ public class Bubbles extends ApplicationAdapter {
 	private OrthographicCamera cam;
 	private static float PUSH_SPEED = 10000;
 	private SpriteBatch batch;
+	private Texture text;
 	Player p;
 
 	@Override
@@ -39,7 +42,9 @@ public class Bubbles extends ApplicationAdapter {
 		//stage.addActor(b[0]);
 		p = new Player(world, stage.getWidth(), stage.getHeight());
 		stage.addActor(p);
-
+		text = new Texture(Gdx.files.internal("buble.png"));
+		text.setWrap(TextureWrap.Repeat,TextureWrap.Repeat);
+		
 		//setting up the camera
 
 		float w = Gdx.graphics.getWidth();
@@ -160,13 +165,24 @@ public class Bubbles extends ApplicationAdapter {
 		updateCam();
 		cam.update();
 		batch.setProjectionMatrix(cam.combined);
-
+		
 		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		world.step(1f/60f, 6, 2);
 		stage.act(Gdx.graphics.getDeltaTime());
         //stage.draw();
 		batch.begin();
+		batch.setColor(1f, 1f, 1f, 1f);
+		batch.draw(text, -0,-0 ,stage.getWidth(),stage.getHeight());
+		batch.draw(text, stage.getWidth(),-0 ,stage.getWidth(),stage.getHeight());
+		batch.draw(text, 0,stage.getHeight() ,stage.getWidth(),stage.getHeight());
+		batch.draw(text, 0,-stage.getHeight() ,stage.getWidth(),stage.getHeight());
+		batch.draw(text, -stage.getWidth(),-0 ,stage.getWidth(),stage.getHeight());
+
+		batch.draw(text, stage.getWidth(),stage.getHeight() ,stage.getWidth(),stage.getHeight());
+		batch.draw(text, -stage.getWidth(),stage.getHeight() ,stage.getWidth(),stage.getHeight());
+		batch.draw(text, stage.getWidth(),-stage.getHeight() ,stage.getWidth(),stage.getHeight());
+		batch.draw(text, -stage.getWidth(),-stage.getHeight() ,stage.getWidth(),stage.getHeight());
 		p.draw(batch, Gdx.graphics.getDeltaTime());
 		for (int i = 0; i<BUBBLE_NUMBER;i++){
 			b[i].draw(batch, Gdx.graphics.getDeltaTime());
