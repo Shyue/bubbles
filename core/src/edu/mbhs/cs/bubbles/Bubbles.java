@@ -18,7 +18,7 @@ import java.util.LinkedList;
  * Main Application: Bubbles Game
  */
 public class Bubbles extends ApplicationAdapter {
-	private static int BUBBLE_NUMBER = 15;
+	private static int BUBBLE_NUMBER = 40;
 	private Bubble[] b = new Bubble[BUBBLE_NUMBER];
 	private Stage stage;
 	private World world;
@@ -34,7 +34,7 @@ public class Bubbles extends ApplicationAdapter {
 		world = new World(new Vector2(0,0), false);
 		Gdx.app.log("AssetPath", Gdx.files.internal("assets/bubble.jpg").file().getAbsolutePath());
 		for(int i = 0; i < BUBBLE_NUMBER; i++){
-			b[i] = new Bubble(world, stage.getWidth(), stage.getHeight());
+			b[i] = new Bubble(world, stage.getWidth()*4, stage.getHeight()*4);
 
 			stage.addActor(b[i]);
 		}
@@ -58,8 +58,8 @@ public class Bubbles extends ApplicationAdapter {
 
 		//this edge detection doesn't work somebody fix it
 		LinkedList<String> holder;
-		float with = Gdx.graphics.getWidth()/Bubble.METERS_TO_PIXELS;
-        float hite = Gdx.graphics.getHeight()/Bubble.METERS_TO_PIXELS;
+		float with = Gdx.graphics.getWidth()/Bubble.METERS_TO_PIXELS*4;
+        float hite = Gdx.graphics.getHeight()/Bubble.METERS_TO_PIXELS*4;
 	    BodyDef bottom = new BodyDef();
 	    bottom.type = BodyDef.BodyType.StaticBody;
 	    bottom.position.set(0,0);
@@ -74,7 +74,7 @@ public class Bubbles extends ApplicationAdapter {
 
 	    BodyDef top = new BodyDef();
 	    top.type = BodyDef.BodyType.StaticBody;
-	    top.position.set(0, stage.getHeight() / Bubble.METERS_TO_PIXELS);
+	    top.position.set(0, stage.getHeight()*4 / Bubble.METERS_TO_PIXELS);
 	    FixtureDef tip = new FixtureDef();
 	    EdgeShape tup = new EdgeShape();
 	    tup.set(new Vector2(-with, 0), new Vector2(with, 0));
@@ -98,7 +98,7 @@ public class Bubbles extends ApplicationAdapter {
 	    
 	    BodyDef right = new BodyDef();
 	    right.type = BodyDef.BodyType.StaticBody;
-	    right.position.set(stage.getWidth() / Bubble.METERS_TO_PIXELS,0);
+	    right.position.set(stage.getWidth()*4 / Bubble.METERS_TO_PIXELS,0);
 	    FixtureDef rot = new FixtureDef();
 	    EdgeShape rut = new EdgeShape();
 	    rut.set(new Vector2(0, -hite), new Vector2(0, hite));
@@ -165,7 +165,8 @@ public class Bubbles extends ApplicationAdapter {
 		updateCam();
 		cam.update();
 		batch.setProjectionMatrix(cam.combined);
-		
+		float w = stage.getWidth()*4;
+		float h = stage.getHeight()*4;
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		world.step(1f/60f, 6, 2);
@@ -173,16 +174,16 @@ public class Bubbles extends ApplicationAdapter {
         //stage.draw();
 		batch.begin();
 		batch.setColor(1f, 1f, 1f, 1f);
-		batch.draw(text, -0,-0 ,stage.getWidth(),stage.getHeight());
-		batch.draw(text, stage.getWidth(),-0 ,stage.getWidth(),stage.getHeight());
-		batch.draw(text, 0,stage.getHeight() ,stage.getWidth(),stage.getHeight());
-		batch.draw(text, 0,-stage.getHeight() ,stage.getWidth(),stage.getHeight());
-		batch.draw(text, -stage.getWidth(),-0 ,stage.getWidth(),stage.getHeight());
+		batch.draw(text, -0,-0 ,w,h);
+		batch.draw(text, w,-0 ,w,h);
+		batch.draw(text, 0,h ,w,h);
+		batch.draw(text, 0,-h ,w,h);
+		batch.draw(text, -w,-0 ,w,h);
 
-		batch.draw(text, stage.getWidth(),stage.getHeight() ,stage.getWidth(),stage.getHeight());
-		batch.draw(text, -stage.getWidth(),stage.getHeight() ,stage.getWidth(),stage.getHeight());
-		batch.draw(text, stage.getWidth(),-stage.getHeight() ,stage.getWidth(),stage.getHeight());
-		batch.draw(text, -stage.getWidth(),-stage.getHeight() ,stage.getWidth(),stage.getHeight());
+		batch.draw(text, w,h ,w,h);
+		batch.draw(text, -w,h ,w,h);
+		batch.draw(text, w,-h ,w,h);
+		batch.draw(text, -w,-h ,w,h);
 		p.draw(batch, Gdx.graphics.getDeltaTime());
 		for (int i = 0; i<BUBBLE_NUMBER;i++){
 			b[i].draw(batch, Gdx.graphics.getDeltaTime());

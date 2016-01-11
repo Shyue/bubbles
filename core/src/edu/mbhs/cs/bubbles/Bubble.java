@@ -18,18 +18,18 @@ public class Bubble extends Actor {
 
 	private float x = 10;
 	private float y = 10;
-	private static final float MAXIMUM_VELOCITY = 5000;
+	private static final float MAXIMUM_VELOCITY = 2000;
 	private Body body;
 	public Body getBody() {
 		return body;
 	}
 
-	private float radius = 8f;	//pic size
+	private float radius = 8f/1.5f;	//pic size
 	private float r, g, b;	//color floats
 	private float r_vel, g_vel, b_vel;	//color velocities
 	private boolean activated;
 	private Fixture fixture;
-	public static final float METERS_TO_PIXELS = 3f;
+	public static final float METERS_TO_PIXELS = 3f*1.5f;
 	private static final float TRANSPARENCY = 0.3f;
 	private static ArrayList<Bubble> bubbles = new ArrayList<Bubble>();
 
