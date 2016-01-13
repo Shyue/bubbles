@@ -18,7 +18,7 @@ import java.util.LinkedList;
  */
 public class Player extends Actor {
 
-	private static final float RADIUS = 8f/3f;
+	public static final float RADIUS = 8f/3f;
 
 	private Color color;
 	private float x, y;
@@ -101,5 +101,7 @@ public class Player extends Actor {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		batch.draw(texture, (body.getPosition().x - RADIUS) * METERS_TO_PIXELS, (body.getPosition().y - RADIUS) * METERS_TO_PIXELS, RADIUS * 2 * METERS_TO_PIXELS, RADIUS * 2 * METERS_TO_PIXELS);
+		System.out.println("Player "+body.getPosition().x*METERS_TO_PIXELS+" "+body.getPosition().y*METERS_TO_PIXELS);
+
 	}
 }

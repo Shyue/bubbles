@@ -162,15 +162,16 @@ public class Bubbles extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		updateCam();
-		cam.update();
-		batch.setProjectionMatrix(cam.combined);
+
 		float w = stage.getWidth()*4;
 		float h = stage.getHeight()*4;
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		world.step(1f/60f, 6, 2);
 		stage.act(Gdx.graphics.getDeltaTime());
+		updateCam();
+		cam.update();
+		batch.setProjectionMatrix(cam.combined);
         //stage.draw();
 		batch.begin();
 		batch.setColor(1f, 1f, 1f, 1f);
@@ -189,9 +190,12 @@ public class Bubbles extends ApplicationAdapter {
 			b[i].draw(batch, Gdx.graphics.getDeltaTime());
 		}
 		batch.end();
+
 	}
 	public void updateCam(){
-		cam.position.set(p.getBody().getPosition().x * Bubble.METERS_TO_PIXELS, p.getBody().getPosition().y* Bubble.METERS_TO_PIXELS, 0);
+		//cam.position.set((p.getBody().getPosition().x-Player.RADIUS) * Bubble.METERS_TO_PIXELS, (p.getBody().getPosition().y-Player.RADIUS)* Bubble.METERS_TO_PIXELS, 0);
+		cam.position.set((p.getBody().getPosition().x) * Bubble.METERS_TO_PIXELS, (p.getBody().getPosition().y)* Bubble.METERS_TO_PIXELS, 0);
+		System.out.println("cam "+cam.position.x+" "+cam.position.y);
 		//System.out.println(p.getBody().getPosition().x+" "+p.getBody().getPosition().y);
 	}
 }
