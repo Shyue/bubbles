@@ -2,6 +2,7 @@ package edu.mbhs.cs.bubbles;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,7 +18,7 @@ import java.util.LinkedList;
 /**
  * Main Application: Bubbles Game
  */
-public class Bubbles extends ApplicationAdapter {
+public class Bubbles implements Screen {
 	private static int BUBBLE_NUMBER = 40;
 	private Bubble[] b = new Bubble[BUBBLE_NUMBER];
 	private Stage stage;
@@ -29,7 +30,7 @@ public class Bubbles extends ApplicationAdapter {
 	Player p;
 
 	@Override
-	public void create () {
+	public void show() {
 		stage = new Stage();
 		world = new World(new Vector2(0,0), false);
 		Gdx.app.log("AssetPath", Gdx.files.internal("assets/bubble.jpg").file().getAbsolutePath());
@@ -161,7 +162,7 @@ public class Bubbles extends ApplicationAdapter {
 	}
 
 	@Override
-	public void render () {
+	public void render(float delta) {
 
 		float w = stage.getWidth()*4;
 		float h = stage.getHeight()*4;
@@ -197,5 +198,30 @@ public class Bubbles extends ApplicationAdapter {
 		cam.position.set((p.getBody().getPosition().x) * Bubble.METERS_TO_PIXELS, (p.getBody().getPosition().y)* Bubble.METERS_TO_PIXELS, 0);
 		System.out.println("cam "+cam.position.x+" "+cam.position.y);
 		//System.out.println(p.getBody().getPosition().x+" "+p.getBody().getPosition().y);
+	}
+
+	@Override
+	public void resize(int width, int height) {
+
+	}
+
+	@Override
+	public void pause() {
+
+	}
+
+	@Override
+	public void resume() {
+
+	}
+
+	@Override
+	public void hide() {
+
+	}
+
+	@Override
+	public void dispose() {
+
 	}
 }
