@@ -45,7 +45,8 @@ public class HomeScreen implements Screen {
 		textButtonStyle.font = font;
 		TextButton b = new TextButton("play", textButtonStyle);
 		b.setSize(50, 50);
-		b.setBounds(stage.getWidth() / 2 - 25, stage.getHeight() / 2 - 50, 50, 50);
+		b.setBounds(stage.getWidth() / 2 - widthOf("play") / 2, stage.getHeight() / 2 - 50, widthOf("play"), 50);
+		System.out.println(widthOf("play"));
 		b.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -60,10 +61,16 @@ public class HomeScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		batch.begin();
-		font.draw(batch, "Bubbles", Gdx.graphics.getWidth() / 2 - layout.width / 2,
+		font.draw(batch, "Bubbles", Gdx.graphics.getWidth() / 2 - widthOf("Bubbles") / 2,
 				Gdx.graphics.getHeight() / 2 + 50);
 		batch.end();
 		stage.draw();
+	}
+
+	private float widthOf(String s) {
+		GlyphLayout dummy = new GlyphLayout();
+		dummy.setText(font, s);
+		return dummy.width;
 	}
 
 	@Override
