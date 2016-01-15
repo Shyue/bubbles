@@ -69,7 +69,6 @@ public class Bubbles implements Screen {
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 		cam = new OrthographicCamera(w/2, h/2);
-		System.out.println(w+" "+h);
 		cam.position.set(w/2, h/2 , 0);
 		cam.update();
 		batch = new SpriteBatch();
@@ -224,7 +223,6 @@ public class Bubbles implements Screen {
 	public void updateCam(){
 		//cam.position.set((p.getBody().getPosition().x-Player.RADIUS) * Bubble.METERS_TO_PIXELS, (p.getBody().getPosition().y-Player.RADIUS)* Bubble.METERS_TO_PIXELS, 0);
 		cam.position.set((p.getBody().getPosition().x) * Bubble.METERS_TO_PIXELS, (p.getBody().getPosition().y)* Bubble.METERS_TO_PIXELS, 0);
-		System.out.println("cam "+cam.position.x+" "+cam.position.y);
 		//System.out.println(p.getBody().getPosition().x+" "+p.getBody().getPosition().y);
 	}
 
@@ -253,7 +251,6 @@ public class Bubbles implements Screen {
 			dy = cam.position.y / Bubble.METERS_TO_PIXELS - (bubble.getBody().getPosition().y + bubble.radius / 2);
 			dist = (float) Math.hypot(dx, dy);
 			if (dist < stage.getWidth() / 5) {
-				System.out.println("hi");
 				theta = (float) Math.atan2(dy, dx);
 				dist = dist / stage.getWidth() * RADIUS * Bubble.METERS_TO_PIXELS;
 				renderer.circle(CENTER_X + dist * (float) -Math.cos(theta), CENTER_Y + dist * (float) -Math.sin(theta), LITTLE_RADIUS / 2);
