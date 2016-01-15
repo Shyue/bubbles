@@ -256,6 +256,20 @@ public class Bubbles implements Screen {
 				renderer.circle(CENTER_X + dist * (float) -Math.cos(theta), CENTER_Y + dist * (float) -Math.sin(theta), LITTLE_RADIUS / 2);
 			}
 		}
+
+		// flags
+		renderer.setColor(Color.YELLOW);
+		for (Flag flag : flags) {
+			dx = cam.position.x - flag.getX();
+			dy = cam.position.y - flag.getY();
+			dist = (float) Math.hypot(dx, dy) / Bubble.METERS_TO_PIXELS;
+			if (dist < stage.getWidth() / 5) {
+				theta = (float) Math.atan2(dy, dx);
+				dist = dist / stage.getWidth() * RADIUS * Bubble.METERS_TO_PIXELS;
+				renderer.circle(CENTER_X + dist * (float) -Math.cos(theta), CENTER_Y + dist * (float) -Math.sin(theta), LITTLE_RADIUS / 2);
+			}
+		}
+
 		renderer.end();
 	}
 
