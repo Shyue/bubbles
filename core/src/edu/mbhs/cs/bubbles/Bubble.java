@@ -24,7 +24,7 @@ public class Bubble extends Actor {
 		return body;
 	}
 
-	private float radius = 8f/1.5f;	//pic size
+	public float radius = 8f/1.5f;	//pic size
 	private float r, g, b;	//color floats
 	private float r_vel, g_vel, b_vel;	//color velocities
 	private boolean activated;

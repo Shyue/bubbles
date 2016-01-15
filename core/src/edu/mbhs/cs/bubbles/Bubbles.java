@@ -4,12 +4,14 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -35,6 +37,7 @@ public class Bubbles implements Screen {
 	private OrthographicCamera cam;
 	private static float PUSH_SPEED = 10000;
 	private SpriteBatch batch;
+	private ShapeRenderer renderer;
 	private Texture text;
 	private Flag[] flags = new Flag[FLAG_NUMBER];
 	private int score = 0;
@@ -70,6 +73,8 @@ public class Bubbles implements Screen {
 		cam.position.set(w/2, h/2 , 0);
 		cam.update();
 		batch = new SpriteBatch();
+		renderer = new ShapeRenderer();
+		//stage.getViewport().setCamera(cam);
 
 		LinkedList<String> holder;
 		float with = Gdx.graphics.getWidth()/Bubble.METERS_TO_PIXELS*4;
@@ -213,12 +218,48 @@ public class Bubbles implements Screen {
 		
 		batch.end();
 
+		updateRadar();
+
 	}
 	public void updateCam(){
 		//cam.position.set((p.getBody().getPosition().x-Player.RADIUS) * Bubble.METERS_TO_PIXELS, (p.getBody().getPosition().y-Player.RADIUS)* Bubble.METERS_TO_PIXELS, 0);
 		cam.position.set((p.getBody().getPosition().x) * Bubble.METERS_TO_PIXELS, (p.getBody().getPosition().y)* Bubble.METERS_TO_PIXELS, 0);
 		System.out.println("cam "+cam.position.x+" "+cam.position.y);
 		//System.out.println(p.getBody().getPosition().x+" "+p.getBody().getPosition().y);
+	}
+
+	public void updateRadar() {
+		final float RADIUS = cam.viewportWidth / 10;
+		final float LITTLE_RADIUS = RADIUS / 10;
+		final float CENTER_X = cam.position.x + cam.viewportWidth / 2 - RADIUS - 5;
+		final float CENTER_Y = cam.position.y + cam.viewportHeight / 2 - RADIUS - 5;
+
+		renderer.setProjectionMatrix(cam.combined);
+		renderer.begin(ShapeRenderer.ShapeType.Filled);
+
+		// radar background
+		renderer.setColor(Color.BLACK);
+		renderer.circle(CENTER_X, CENTER_Y, RADIUS);
+
+		// player indicator
+		renderer.setColor(Color.BLUE);
+		renderer.circle(CENTER_X, CENTER_Y, LITTLE_RADIUS);
+
+		// other bubbles
+		renderer.setColor(Color.RED);
+		float dist, theta, dx, dy;
+		for (Bubble bubble : b) {
+			dx = cam.position.x / Bubble.METERS_TO_PIXELS - (bubble.getBody().getPosition().x + bubble.radius / 2);
+			dy = cam.position.y / Bubble.METERS_TO_PIXELS - (bubble.getBody().getPosition().y + bubble.radius / 2);
+			dist = (float) Math.hypot(dx, dy);
+			if (dist < stage.getWidth() / 5) {
+				System.out.println("hi");
+				theta = (float) Math.atan2(dy, dx);
+				dist = dist / stage.getWidth() * RADIUS * Bubble.METERS_TO_PIXELS;
+				renderer.circle(CENTER_X + dist * (float) -Math.cos(theta), CENTER_Y + dist * (float) -Math.sin(theta), LITTLE_RADIUS / 2);
+			}
+		}
+		renderer.end();
 	}
 
 	@Override
