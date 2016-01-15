@@ -1,26 +1,34 @@
 package edu.mbhs.cs.bubbles;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import java.util.LinkedList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  * Main Application: Bubbles Game
  */
 public class Bubbles implements Screen {
 	private static int BUBBLE_NUMBER = 80;
-	private static int FLAG_NUMBER = 10;
+	private static int FLAG_NUMBER = 5;
 	private Bubble[] b = new Bubble[BUBBLE_NUMBER];
 	private Stage stage;
 	private World world;
@@ -29,7 +37,9 @@ public class Bubbles implements Screen {
 	private SpriteBatch batch;
 	private Texture text;
 	private Flag[] flags = new Flag[FLAG_NUMBER];
-	Player p;
+	private int score = 0;
+	private BitmapFont font = new BitmapFont();
+	private Player p;
 
 	@Override
 	public void show() {
@@ -189,11 +199,17 @@ public class Bubbles implements Screen {
 		
 		for (int i = 0; i<FLAG_NUMBER;i++){
 			flags[i].draw(batch, Gdx.graphics.getDeltaTime());
+			if(Intersector.overlaps(p.getBounds(), flags[i].getBounds())){
+				flags[i].init();
+				score++;
+			}
 		}
 		
 		for (int i = 0; i<BUBBLE_NUMBER;i++){
 			b[i].draw(batch, Gdx.graphics.getDeltaTime());
 		}
+		
+		font.draw(batch, "Score: "+score, p.getX() + 90, p.getY()+100);
 		
 		batch.end();
 

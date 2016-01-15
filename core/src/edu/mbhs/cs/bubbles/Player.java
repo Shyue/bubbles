@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -76,11 +77,11 @@ public class Player extends Actor implements GestureListener{
 		//super.act(delta);
 		//x = getStage().getWidth() / 2;
 		//y = getStage().getHeight() / 2;
-		
 		LinkedList<String> holder = new LinkedList();
 		holder.add("Player"); holder.add(body.getPosition().x+""); holder.add(body.getPosition().y+"");
 		fixture.setUserData(holder);
 		move();
+		updateBounds();
 	}
 
 	public void move(){
@@ -111,8 +112,8 @@ public class Player extends Actor implements GestureListener{
 		}
 	//this.setRotation(body.getLinearVelocity().angle());
 	//this.rotateBy(body.getLinearVelocity().angle());
-		//x = body.getPosition().x * METERS_TO_PIXELS;
-		//y = body.getPosition().y * METERS_TO_PIXELS;
+		x = body.getPosition().x * METERS_TO_PIXELS;
+		y = body.getPosition().y * METERS_TO_PIXELS;
 	}
 
 	@Override
@@ -192,5 +193,11 @@ public class Player extends Actor implements GestureListener{
 			Vector2 pointer1, Vector2 pointer2) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	private void updateBounds() {
+		this.setBounds(x, y, RADIUS * 2 * METERS_TO_PIXELS, RADIUS * 2 * METERS_TO_PIXELS);
+	}
+	public Rectangle getBounds(){
+		return new Rectangle(x, y, RADIUS * 2 * METERS_TO_PIXELS, RADIUS * 2 * METERS_TO_PIXELS);
 	}
 }

@@ -3,6 +3,7 @@ package edu.mbhs.cs.bubbles;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -31,6 +32,15 @@ public class Flag extends Actor {
 		x = (float) (Math.random() * stage.getWidth() * 3.5 + stage.getWidth() * 0.25);
 		y = (float) (Math.random() * stage.getHeight() * 3.5 + stage.getHeight() * 0.25);
 	}
-
+	@Override
+	public void act(float delta) {
+		updateBounds();
+	}
+	private void updateBounds() {
+		this.setBounds(x, y, 100, 100);
+	}
+	public Rectangle getBounds(){
+		return new Rectangle(x, y, 100, 100);
+	}
 
 }
