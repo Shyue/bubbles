@@ -214,7 +214,7 @@ public class Bubbles implements Screen {
 			b[i].draw(batch, Gdx.graphics.getDeltaTime());
 		}
 		
-		font.draw(batch, "Score: "+score, p.getX() + 90, p.getY()+100);
+		font.draw(batch, "Score: "+score, p.getX() - 120, p.getY() + 100);
 		
 		batch.end();
 
