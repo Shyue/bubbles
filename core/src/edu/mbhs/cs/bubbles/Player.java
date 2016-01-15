@@ -21,7 +21,7 @@ import java.util.LinkedList;
  */
 public class Player extends Actor implements GestureListener{
 
-	public static final float RADIUS = 3f;
+	public static final float RADIUS = 5f;
 
 	private Color color;
 	private float x, y;
@@ -31,7 +31,7 @@ public class Player extends Actor implements GestureListener{
 	}
 	private Fixture fixture;
 	public static final float METERS_TO_PIXELS = Bubble.METERS_TO_PIXELS;
-	private static final float BASE_SPEED = 600;
+	private static final float BASE_SPEED = 900;
 	private TextureRegion texture = new TextureRegion();
 	private Vector2 androidForce = new Vector2(0,0);
 
@@ -57,7 +57,7 @@ public class Player extends Actor implements GestureListener{
 		shape.setRadius(RADIUS);
 		FixtureDef def = new FixtureDef();
 		def.shape = shape;
-		def.density = 0.2f;
+		def.density = 0.09f;
 		def.restitution = 0.77f;
 		def.friction = 0.8f;
 
@@ -119,8 +119,8 @@ public class Player extends Actor implements GestureListener{
 	public void draw(Batch batch, float parentAlpha) {
 		batch.draw(texture, (body.getPosition().x - RADIUS) * METERS_TO_PIXELS, 
 				(body.getPosition().y - RADIUS) * METERS_TO_PIXELS, 
-				518f/texture.getRegionWidth()*RADIUS * 2 * METERS_TO_PIXELS,
-				(686f-340f)/texture.getRegionHeight()*RADIUS * 2 * METERS_TO_PIXELS
+				518f/texture.getRegionWidth()*RADIUS * 1 * METERS_TO_PIXELS,
+				(686f-340f)/texture.getRegionHeight()*RADIUS * 1 * METERS_TO_PIXELS
 				, RADIUS * 2 * METERS_TO_PIXELS
 				, RADIUS * 2 * METERS_TO_PIXELS, 1f, texture.getRegionHeight() / texture.getRegionWidth(), 
 				body.getLinearVelocity().angle()-90, true);
@@ -160,9 +160,11 @@ public class Player extends Actor implements GestureListener{
 	@Override
 	public boolean fling(float velocityX, float velocityY, int button) {
 		// TODO Auto-generated method stub
-		double angle = (float) Math.sqrt(velocityX * velocityX + velocityY*velocityY);
-		androidForce.x = (float) Math.cos(angle) * BASE_SPEED;
-		androidForce.y = (float) Math.sin(angle) * BASE_SPEED;
+		double mag = (float) Math.sqrt(velocityX * velocityX + velocityY * velocityY);
+		double cos = velocityX / mag;
+		double sin = velocityY / mag;
+		androidForce.x = (float) cos * BASE_SPEED;
+		androidForce.y = (float) -sin * BASE_SPEED;
 		
 		return true;
 	}
