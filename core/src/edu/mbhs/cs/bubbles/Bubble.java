@@ -30,10 +30,10 @@ public class Bubble extends Actor {
 	private boolean activated;
 	private Fixture fixture;
 	public static final float METERS_TO_PIXELS = 3f*1.5f;
-	private static final float TRANSPARENCY = 0.5f;
+	private static final float TRANSPARENCY = 0.3f;
 	private static ArrayList<Bubble> bubbles = new ArrayList<Bubble>();
 
-	Texture texture = new Texture(Gdx.files.internal("ball.png"));
+	Texture texture = new Texture(Gdx.files.internal("bubble.png"));
 
 	/**
 	 * Places bubble at bottom left corner, gives it a radius of 64, gives it a random x and y velocity

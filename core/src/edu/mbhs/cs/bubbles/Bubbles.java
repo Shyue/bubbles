@@ -19,7 +19,7 @@ import java.util.LinkedList;
  * Main Application: Bubbles Game
  */
 public class Bubbles implements Screen {
-	private static int BUBBLE_NUMBER = 80;
+	private static int BUBBLE_NUMBER = 40;
 	private Bubble[] b = new Bubble[BUBBLE_NUMBER];
 	private Stage stage;
 	private World world;
@@ -33,7 +33,7 @@ public class Bubbles implements Screen {
 	public void show() {
 		stage = new Stage();
 		world = new World(new Vector2(0,0), false);
-		//Gdx.app.log("AssetPath", Gdx.files.internal("assets/bubble.jpg").file().getAbsolutePath());
+		Gdx.app.log("AssetPath", Gdx.files.internal("assets/bubble.jpg").file().getAbsolutePath());
 		for(int i = 0; i < BUBBLE_NUMBER; i++){
 			b[i] = new Bubble(world, stage.getWidth()*4, stage.getHeight()*4);
 
