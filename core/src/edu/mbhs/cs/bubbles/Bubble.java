@@ -1,8 +1,5 @@
 package edu.mbhs.cs.bubbles;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Class representing the bubbles bouncing around the screen.
@@ -33,7 +33,7 @@ public class Bubble extends Actor {
 	private static final float TRANSPARENCY = 0.5f;
 	private static ArrayList<Bubble> bubbles = new ArrayList<Bubble>();
 
-	Texture texture = new Texture(Gdx.files.internal("ball.png"));
+	Texture texture = new Texture(Gdx.files.internal("bubble.png"));
 
 	/**
 	 * Places bubble at bottom left corner, gives it a radius of 64, gives it a random x and y velocity

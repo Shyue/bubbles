@@ -1,13 +1,11 @@
 package edu.mbhs.cs.bubbles;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Rectangle;
@@ -43,7 +41,7 @@ public class Player extends Actor implements GestureListener{
 	 * Makes a new chartreuse player
 	 */
 	public Player(World w, float maxWidth, float maxHeight) {
-		texture.setTexture(new Texture(Gdx.files.internal("mandleplayer.png")));
+		texture.setTexture(new Texture(Gdx.files.internal("vessel.png")));
 		texture.setRegion(texture.getTexture());
 		//this.setOrigin(515, 340);
 		color = Color.CHARTREUSE;

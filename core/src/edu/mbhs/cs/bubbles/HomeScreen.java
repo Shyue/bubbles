@@ -19,9 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-/**
- * Created by Eyob on 1/13/2016.
- */
 public class HomeScreen implements Screen {
 
 	private Game game;
@@ -38,9 +35,9 @@ public class HomeScreen implements Screen {
 		font.setColor(Color.WHITE);
 		GlyphLayout layout = new GlyphLayout();
 		layout.setText(font, "Bubbles");
+
 		play = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("play.jpg"))));
 		playClicked = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("play-clicked.jpg"))));
-	
 		playHovered = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("play-hovered.jpg"))));
 	}
 
@@ -81,8 +78,9 @@ public class HomeScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		font.draw(batch, "Bubbles", Gdx.graphics.getWidth() / 2 - widthOf("Bubbles") / 2,
-				Gdx.graphics.getHeight() / 2 + 50);
+		font.draw(batch, "Bubbles",
+				Gdx.graphics.getWidth() / 2 - widthOf("Bubbles") / 2,
+				Gdx.graphics.getHeight() / 2 - heightOf("Bubbles") / 2);
 		batch.end();
 		stage.act(delta);
 		stage.draw();
@@ -93,9 +91,11 @@ public class HomeScreen implements Screen {
 	}
 
 	private float widthOf(String s) {
-		GlyphLayout dummy = new GlyphLayout();
-		dummy.setText(font, s);
-		return dummy.width;
+		return new GlyphLayout(font, s).width;
+	}
+
+	private float heightOf(String s) {
+		return new GlyphLayout(font, s).height;
 	}
 
 	@Override
