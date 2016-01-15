@@ -20,6 +20,7 @@ import java.util.LinkedList;
  */
 public class Bubbles implements Screen {
 	private static int BUBBLE_NUMBER = 80;
+	private static int FLAG_NUMBER = 10;
 	private Bubble[] b = new Bubble[BUBBLE_NUMBER];
 	private Stage stage;
 	private World world;
@@ -27,20 +28,24 @@ public class Bubbles implements Screen {
 	private static float PUSH_SPEED = 10000;
 	private SpriteBatch batch;
 	private Texture text;
+	private Flag[] flags = new Flag[FLAG_NUMBER];
 	Player p;
 
 	@Override
 	public void show() {
 		stage = new Stage();
 		world = new World(new Vector2(0,0), false);
-		//Gdx.app.log("AssetPath", Gdx.files.internal("assets/bubble.jpg").file().getAbsolutePath());
+		
 		for(int i = 0; i < BUBBLE_NUMBER; i++){
 			b[i] = new Bubble(world, stage.getWidth()*4, stage.getHeight()*4);
-
 			stage.addActor(b[i]);
 		}
-		//b[0] = new Bubble(world);
-		//stage.addActor(b[0]);
+		
+		for(int i = 0; i < FLAG_NUMBER; i++){
+			flags[i] = new Flag(stage);
+			stage.addActor(flags[i]);
+		}
+		
 		p = new Player(world, stage.getWidth(), stage.getHeight());
 		stage.addActor(p);
 		text = new Texture(Gdx.files.internal("buble.png"));
@@ -55,9 +60,7 @@ public class Bubbles implements Screen {
 		cam.position.set(w/2, h/2 , 0);
 		cam.update();
 		batch = new SpriteBatch();
-		//stage.getViewport().setCamera(cam);
 
-		//this edge detection doesn't work somebody fix it
 		LinkedList<String> holder;
 		float with = Gdx.graphics.getWidth()/Bubble.METERS_TO_PIXELS*4;
         float hite = Gdx.graphics.getHeight()/Bubble.METERS_TO_PIXELS*4;
@@ -122,25 +125,20 @@ public class Bubbles implements Screen {
 			public void beginContact(Contact contact) {
 
 				if (((LinkedList)contact.getFixtureA().getUserData()).get(0)=="Player" && ((LinkedList)contact.getFixtureB().getUserData()).get(0)=="Bubble"){
-					//System.out.println(contact.getFixtureA().getUserData()+" "+contact.getFixtureB().getUserData());
 
 					contact.getFixtureA().getBody().applyForceToCenter(new Vector2(
 							PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(1))-Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(1)))
 							,
 							PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(2))-Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(2)))
 					), true);
-					//System.out.println(PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(1))-Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(1)))+" "+PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(2))-Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(2))));
 				}
 				if (((LinkedList)contact.getFixtureB().getUserData()).get(0)=="Player" && ((LinkedList)contact.getFixtureA().getUserData()).get(0)=="Bubble"){
-					//System.out.println(contact.getFixtureA().getUserData()+" "+contact.getFixtureB().getUserData());
 
 					contact.getFixtureB().getBody().applyForceToCenter(new Vector2(
 							PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(1))-Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(1)))
 							,
 							PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(2))-Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(2)))
 					), true);
-					//System.out.println(PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(1))-Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(1)))+" "+PUSH_SPEED*(Float.parseFloat((String)((LinkedList)contact.getFixtureB().getUserData()).get(2))-Float.parseFloat((String)((LinkedList)contact.getFixtureA().getUserData()).get(2))));
-
 			}
 
 			}
@@ -166,7 +164,7 @@ public class Bubbles implements Screen {
 
 		float w = stage.getWidth()*4;
 		float h = stage.getHeight()*4;
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+	//	Gdx.gl.glClearColor(1, 1, 1, 1);
 		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		world.step(1f/60f, 6, 2);
 		stage.act(Gdx.graphics.getDeltaTime());
@@ -186,10 +184,17 @@ public class Bubbles implements Screen {
 		batch.draw(text, -w,h ,w,h);
 		batch.draw(text, w,-h ,w,h);
 		batch.draw(text, -w,-h ,w,h);
+		
 		p.draw(batch, Gdx.graphics.getDeltaTime());
+		
+		for (int i = 0; i<FLAG_NUMBER;i++){
+			flags[i].draw(batch, Gdx.graphics.getDeltaTime());
+		}
+		
 		for (int i = 0; i<BUBBLE_NUMBER;i++){
 			b[i].draw(batch, Gdx.graphics.getDeltaTime());
 		}
+		
 		batch.end();
 
 	}
