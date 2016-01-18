@@ -1,5 +1,6 @@
 package edu.mbhs.cs.bubbles;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -37,7 +38,11 @@ public class Bubbles implements Screen {
 	private Texture text;
 	private BitmapFont font = new BitmapFont();
 	private int score = 0;
-
+	private Game game;
+	public Bubbles(Game g){
+		game = g;
+	}
+	
 	@Override
 	public void show() {
 		// set up stage and world (actor drawing manager, physics manager
@@ -46,7 +51,7 @@ public class Bubbles implements Screen {
 
 		// add bubbles to world and stage
 		for(int i = 0; i < BUBBLE_NUMBER; i++){
-			b[i] = new Bubble(world);
+			b[i] = new Bubble(world, i > 6);
 			stage.addActor(b[i]);
 		}
 
@@ -85,12 +90,19 @@ public class Bubbles implements Screen {
 				Body bBody = contact.getFixtureB().getBody();
 
 				if (aUserData.get(0).equals("Player") && bUserData.get(0).equals("Bubble")) {
+					if(bBody.getMass() > 9){
+						game.setScreen(new HomeScreen(game, score));
+					}
 					aBody.applyForceToCenter(new Vector2(
 							PUSH_SPEED * (Float.parseFloat((String) aUserData.get(1)) - Float.parseFloat((String) bUserData.get(1))),
 							PUSH_SPEED * (Float.parseFloat((String) aUserData.get(2)) - Float.parseFloat((String) bUserData.get(2)))
 					), true);
+					
 				}
 				if (bUserData.get(0).equals("Player") && aUserData.get(0).equals("Bubble")) {
+					if(aBody.getMass() > 9){
+						game.setScreen(new HomeScreen(game, score));
+					}
 					bBody.applyForceToCenter(new Vector2(
 							PUSH_SPEED * (Float.parseFloat((String) bUserData.get(1)) - Float.parseFloat((String) aUserData.get(1))),
 							PUSH_SPEED * (Float.parseFloat((String) bUserData.get(2)) - Float.parseFloat((String) aUserData.get(2)))
@@ -258,9 +270,11 @@ public class Bubbles implements Screen {
 		renderer.circle(CENTER_X, CENTER_Y, LITTLE_RADIUS);
 
 		// other bubbles
-		renderer.setColor(Color.RED);
+		
 		float dist, theta, dx, dy;
 		for (Bubble bubble : b) {
+			renderer.setColor(Color.RED);
+			if(!bubble.isFriend()) renderer.setColor(Color.WHITE);
 			dx = cam.position.x / Bubble.METERS_TO_PIXELS - (bubble.getBody().getPosition().x + Bubble.RADIUS / 2);
 			dy = cam.position.y / Bubble.METERS_TO_PIXELS - (bubble.getBody().getPosition().y + Bubble.RADIUS / 2);
 			dist = (float) Math.hypot(dx, dy);

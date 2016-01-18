@@ -2,6 +2,7 @@ package edu.mbhs.cs.bubbles;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -30,18 +31,38 @@ public class HomeScreen implements Screen {
 	private BitmapFont font;
 	private Button playButton;
 	private Drawable play, playClicked, playHovered;
-
+	private int score = -1;
+	Preferences highScore = Gdx.app.getPreferences("High Score");
 	public HomeScreen(Game g) {
 		game = g;
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		font.setColor(Color.WHITE);
+		font.getData().setScale(2f);
 		GlyphLayout layout = new GlyphLayout();
 		layout.setText(font, "Bubbles");
 		play = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("play.jpg"))));
 		playClicked = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("play-clicked.jpg"))));
 	
 		playHovered = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("play-hovered.jpg"))));
+	}
+	public HomeScreen(Game g, int skore){
+		game = g;
+		batch = new SpriteBatch();
+		font = new BitmapFont();
+		font.setColor(Color.WHITE);
+		font.getData().setScale(2f);
+		GlyphLayout layout = new GlyphLayout();
+		layout.setText(font, "Bubbles");
+		play = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("play.jpg"))));
+		playClicked = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("play-clicked.jpg"))));
+	
+		playHovered = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("play-hovered.jpg"))));
+		score = skore;
+		if(highScore.getInteger("score") < score){
+			highScore.putInteger("score", score);
+			highScore.flush();
+		}
 	}
 
 	@Override
@@ -57,7 +78,7 @@ public class HomeScreen implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				super.clicked(event, x, y);
-				game.setScreen(new Bubbles());
+				game.setScreen(new Bubbles(game));
 			}
 
 			@Override
@@ -82,8 +103,19 @@ public class HomeScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.begin();
-		font.draw(batch, "Bubbles", Gdx.graphics.getWidth() / 2 - widthOf("Bubbles") / 2,
-				Gdx.graphics.getHeight() / 2 + 50);
+		if(score == -1){
+			font.draw(batch, "Bubbles", Gdx.graphics.getWidth() / 2 - widthOf("Bubbles") / 2,
+					Gdx.graphics.getHeight() / 2 + 50);
+		}
+		else{
+			font.draw(batch, "Score: "+score, Gdx.graphics.getWidth() / 2 - widthOf( "Score: "+score) / 2,
+					Gdx.graphics.getHeight() / 2 + 50);
+			font.draw(batch, "High Score: "+ highScore.getInteger("score"), 
+					Gdx.graphics.getWidth() / 2 - widthOf("High Score: " + highScore.getInteger("score")) / 2,
+					Gdx.graphics.getHeight() / 2 + font.getXHeight() + 100);
+			font.draw(batch, "Bubbles", Gdx.graphics.getWidth() / 2 - widthOf("Bubbles") / 2,
+					Gdx.graphics.getHeight() / 2 + font.getXHeight()*2 + 150);
+		}
 		batch.end();
 
 		stage.act(delta);

@@ -20,20 +20,23 @@ public class Bubble extends Actor {
 
 	private static final float MAXIMUM_VELOCITY = 2000;
 	private static final float TRANSPARENCY = 0.5f;
+	
+	private final boolean friend;
 
 	private Body body;
 	private float r, g, b;	//color floats
 	private float r_vel, g_vel, b_vel;	//color velocities
 	private Fixture fixture;
 
-	Texture texture = new Texture(Gdx.files.internal("ball.png"));
+	private Texture texture = new Texture(Gdx.files.internal("ball.png"));
 
 	/**
 	 * Places bubble at bottom left corner, gives it a radius of 64, gives it a random x and y velocity
 	 * between 0 and 10, sets rgb values to random values between 0 and 1, and sets rgb "velocities" to 0.5
 	 */
-	public Bubble(World w){
-		//This is a TERRIBLE way of doing things
+	public Bubble(World w, boolean nice){
+		friend = nice;
+	
 		r = (float)Math.pow(Math.random(), 1.0 / 5);
 		g = (float)Math.pow(Math.random(), 1.0 / 5);
 		b = (float)Math.pow(Math.random(), 1.0 / 5);
@@ -51,10 +54,19 @@ public class Bubble extends Actor {
 	    FixtureDef def = new FixtureDef();
 	    def.shape = shape;
 	    def.density = 0.1f;
+	    if(!friend){
+			texture = new Texture(Gdx.files.internal("spiked.png"));
+			def.density = 0.4f;
+		}
 		def.restitution = 0.5f;
 	    fixture = body.createFixture(def);
 		fixture.setUserData(Arrays.asList("Bubble", String.valueOf(body.getPosition().x), String.valueOf(body.getPosition().y)));
 		shape.dispose();
+		System.out.println(body.getMass());
+	}
+
+	public boolean isFriend() {
+		return friend;
 	}
 
 	@Override
