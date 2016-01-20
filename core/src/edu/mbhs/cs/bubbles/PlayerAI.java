@@ -25,6 +25,8 @@ public class PlayerAI extends Actor implements Steerable<Vector2> {
 
 	private static final float BASE_SPEED = 900;
 
+	public int score = 0;
+
 	private boolean tagged;
 	private float maxLinearSpeed, maxLinearAcceleration;
 	private float maxAngularSpeed, maxAngularAcceleration;

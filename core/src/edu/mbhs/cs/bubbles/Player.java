@@ -24,6 +24,8 @@ public class Player extends Actor implements GestureListener{
 
 	private static final float BASE_SPEED = 900;
 
+	public int score = 0;
+
 	private float x, y;
 	private Body body;
 	private Fixture fixture;

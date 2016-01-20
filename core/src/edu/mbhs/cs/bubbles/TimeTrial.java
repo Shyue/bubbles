@@ -38,7 +38,6 @@ public class TimeTrial implements Screen {
 	private ShapeRenderer renderer;
 	private Texture text;
 	private BitmapFont font = new BitmapFont();
-	private int score = 0;
 	private Game game;
 	public TimeTrial(Game g){
 		game = g;
@@ -96,7 +95,7 @@ public class TimeTrial implements Screen {
 
 				if (aUserData.get(0).equals("Player") && bUserData.get(0).equals("Bubble")) {
 					if(bBody.getMass() > 9){
-						game.setScreen(new HomeScreen(game, score));
+						game.setScreen(new HomeScreen(game, p.score));
 					}
 					aBody.applyForceToCenter(new Vector2(
 							PUSH_SPEED * (Float.parseFloat((String) aUserData.get(1)) - Float.parseFloat((String) bUserData.get(1))),
@@ -106,7 +105,7 @@ public class TimeTrial implements Screen {
 				}
 				if (bUserData.get(0).equals("Player") && aUserData.get(0).equals("Bubble")) {
 					if(aBody.getMass() > 9){
-						game.setScreen(new HomeScreen(game, score));
+						game.setScreen(new HomeScreen(game, p.score));
 					}
 					bBody.applyForceToCenter(new Vector2(
 							PUSH_SPEED * (Float.parseFloat((String) bUserData.get(1)) - Float.parseFloat((String) aUserData.get(1))),
@@ -164,7 +163,7 @@ public class TimeTrial implements Screen {
 			flags[i].draw(batch, Gdx.graphics.getDeltaTime());
 			if(Intersector.overlaps(p.getBounds(), flags[i].getBounds())) {
 				flags[i].init();
-				score++;
+				p.score++;
 			}
 		}
 
@@ -174,7 +173,7 @@ public class TimeTrial implements Screen {
 		}
 
 		// draw score
-		font.draw(batch, String.format("Score: %d", score), p.getX() - 120, p.getY() + 100);
+		font.draw(batch, String.format("Score: %d", p.score), p.getX() - 120, p.getY() + 100);
 
 		// stop picture drawing tool
 		batch.end();
