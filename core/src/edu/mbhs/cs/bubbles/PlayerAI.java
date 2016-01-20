@@ -69,7 +69,15 @@ public class PlayerAI extends Actor implements Steerable<Vector2> {
 	public void act(float delta) {
 		fixture.setUserData(Arrays.asList("AI", String.valueOf(body.getPosition().x), String.valueOf(body.getPosition().y)));
 		updateBounds();
+		updateBehavior();
 		update(delta);
+	}
+
+	private void updateBehavior() {
+		// if about to collide with bubble, avoid collision
+		// if about to collide with player, evade
+		// if in valid radius of flag, seek flag
+		// otherwise wander
 	}
 
 	public void update(float delta) {
