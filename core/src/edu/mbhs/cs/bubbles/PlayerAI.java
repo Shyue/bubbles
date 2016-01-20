@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
+import com.badlogic.gdx.ai.steer.behaviors.Wander;
 import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -76,10 +77,22 @@ public class PlayerAI extends Actor implements Steerable<Vector2> {
 	}
 
 	private void updateBehavior() {
+		SteeringBehavior<Vector2> behavior;
+
 		// if about to collide with bubble, avoid collision
+		// TODO: implement
+
 		// if about to collide with player, evade
+		// TODO: implement
+
 		// if in valid radius of flag, seek flag
+		// TODO: implement
+
 		// otherwise wander
+		behavior = new Wander<Vector2>(this)
+				.setWanderRadius(500);
+
+		setBehavior(behavior);
 	}
 
 	public void update(float delta) {

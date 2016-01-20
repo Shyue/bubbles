@@ -93,6 +93,7 @@ public class TimeTrial implements Screen {
 				Body aBody = contact.getFixtureA().getBody();
 				Body bBody = contact.getFixtureB().getBody();
 
+				// TODO: handle ai collision
 				if (aUserData.get(0).equals("Player") && bUserData.get(0).equals("Bubble")) {
 					if(bBody.getMass() > 9){
 						game.setScreen(new HomeScreen(game, p.score));
