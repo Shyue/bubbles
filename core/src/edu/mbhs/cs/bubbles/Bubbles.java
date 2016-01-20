@@ -26,7 +26,8 @@ public class Bubbles implements Screen {
 	private static int BUBBLE_NUMBER = 50;
 	private static int FLAG_NUMBER = 5;
 	private static float PUSH_SPEED = 10000;
-
+	private static int ENEMY_NUMBER = 10;
+	
 	private Bubble[] b = new Bubble[BUBBLE_NUMBER];
 	private Flag[] flags = new Flag[FLAG_NUMBER];
 	private Player p;
@@ -50,7 +51,7 @@ public class Bubbles implements Screen {
 
 		// add bubbles to world and stage
 		for(int i = 0; i < BUBBLE_NUMBER; i++){
-			b[i] = new Bubble(world, i > 6);
+			b[i] = new Bubble(world, i < BUBBLE_NUMBER - ENEMY_NUMBER);
 			stage.addActor(b[i]);
 		}
 
