@@ -1,13 +1,13 @@
 package edu.mbhs.cs.bubbles;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.ai.GdxAI;
+import com.badlogic.gdx.ai.steer.Steerable;
+import com.badlogic.gdx.ai.steer.SteeringAcceleration;
+import com.badlogic.gdx.ai.steer.SteeringBehavior;
+import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -18,12 +18,20 @@ import java.util.Arrays;
 /**
  * Class representing the player, a small circle in the sea of bubbles
  */
-public class PlayerAI extends Actor {
+public class PlayerAI extends Actor implements Steerable<Vector2> {
 
 	public static final float RADIUS = 5f;
 	public static final float METERS_TO_PIXELS = Bubble.METERS_TO_PIXELS;
 
 	private static final float BASE_SPEED = 900;
+
+	private boolean tagged;
+	private float maxLinearSpeed, maxLinearAcceleration;
+	private float maxAngularSpeed, maxAngularAcceleration;
+	private float zeroLinearSpeedThreshold;
+
+	private SteeringBehavior<Vector2> behavior;
+	private SteeringAcceleration<Vector2> steeringAcceleration;
 
 	private float x, y;
 	private Body body;
@@ -53,13 +61,13 @@ public class PlayerAI extends Actor {
 		def.friction = 0.8f;
 
 		fixture = body.createFixture(def);
-		fixture.setUserData(Arrays.asList("Player", String.valueOf(body.getPosition().x), String.valueOf(body.getPosition().y)));
+		fixture.setUserData(Arrays.asList("AI", String.valueOf(body.getPosition().x), String.valueOf(body.getPosition().y)));
 		shape.dispose();
 	}
 
 	@Override
 	public void act(float delta) {
-		fixture.setUserData(Arrays.asList("Player", String.valueOf(body.getPosition().x), String.valueOf(body.getPosition().y)));
+		fixture.setUserData(Arrays.asList("AI", String.valueOf(body.getPosition().x), String.valueOf(body.getPosition().y)));
 		updateBounds();
 	}
 
@@ -90,5 +98,159 @@ public class PlayerAI extends Actor {
 
 	public Rectangle getBounds(){
 		return new Rectangle(x, y, RADIUS * 2 * METERS_TO_PIXELS, RADIUS * 2 * METERS_TO_PIXELS);
+	}
+
+	@Override
+	public Vector2 getLinearVelocity() {
+		return body.getLinearVelocity();
+	}
+
+	@Override
+	public float getAngularVelocity() {
+		return body.getAngularVelocity();
+	}
+
+	@Override
+	public float getBoundingRadius() {
+		return RADIUS;
+	}
+
+	@Override
+	public boolean isTagged() {
+		return tagged;
+	}
+
+	@Override
+	public void setTagged(boolean tagged) {
+		this.tagged = tagged;
+	}
+
+	@Override
+	public float getZeroLinearSpeedThreshold() {
+		return zeroLinearSpeedThreshold;
+	}
+
+	@Override
+	public void setZeroLinearSpeedThreshold(float value) {
+		zeroLinearSpeedThreshold = value;
+	}
+
+	@Override
+	public float getMaxLinearSpeed() {
+		return maxLinearSpeed;
+	}
+
+	@Override
+	public void setMaxLinearSpeed(float maxLinearSpeed) {
+		this.maxLinearSpeed = maxLinearSpeed;
+	}
+
+	@Override
+	public float getMaxLinearAcceleration() {
+		return maxLinearAcceleration;
+	}
+
+	@Override
+	public void setMaxLinearAcceleration(float maxLinearAcceleration) {
+		this.maxLinearAcceleration = maxLinearAcceleration;
+	}
+
+	@Override
+	public float getMaxAngularSpeed() {
+		return maxAngularSpeed;
+	}
+
+	@Override
+	public void setMaxAngularSpeed(float maxAngularSpeed) {
+		this.maxAngularSpeed = maxAngularSpeed;
+	}
+
+	@Override
+	public float getMaxAngularAcceleration() {
+		return maxAngularAcceleration;
+	}
+
+	@Override
+	public void setMaxAngularAcceleration(float maxAngularAcceleration) {
+		this.maxAngularAcceleration = maxAngularAcceleration;
+	}
+
+	@Override
+	public Vector2 getPosition() {
+		return body.getPosition();
+	}
+
+	@Override
+	public float getOrientation() {
+		return body.getAngle();
+	}
+
+	@Override
+	public void setOrientation(float orientation) {
+	}
+
+	@Override
+	public float vectorToAngle(Vector2 vector) {
+		return Util.vectorToAngle(vector);
+	}
+
+	@Override
+	public Vector2 angleToVector(Vector2 outVector, float angle) {
+		return Util.angleToVector(outVector, angle);
+	}
+
+	@Override
+	public Location<Vector2> newLocation() {
+		return new Box2dLocation();
+	}
+
+	public void setBehavior(SteeringBehavior<Vector2> behavior) {
+		this.behavior = behavior;
+	}
+
+	public SteeringBehavior<Vector2> getBehavior() {
+		return behavior;
+	}
+
+}
+
+class Box2dLocation implements Location<Vector2> {
+
+	private Vector2 position;
+	private float orientation;
+
+	public Box2dLocation() {
+		position = new Vector2();
+		orientation = 0;
+	}
+
+	@Override
+	public Vector2 getPosition() {
+		return position;
+	}
+
+	@Override
+	public float getOrientation() {
+		return orientation;
+	}
+
+	@Override
+	public void setOrientation(float orientation) {
+		this.orientation = orientation;
+	}
+
+	@Override
+	public float vectorToAngle(Vector2 vector) {
+		return Util.vectorToAngle(vector);
+	}
+
+	@Override
+	public Vector2 angleToVector(Vector2 outVector, float angle) {
+		return Util.angleToVector(outVector, angle);
+	}
+
+	@Override
+	public Location<Vector2> newLocation() {
+		return new Box2dLocation();
 	}
 }
