@@ -69,6 +69,31 @@ public class PlayerAI extends Actor implements Steerable<Vector2> {
 	public void act(float delta) {
 		fixture.setUserData(Arrays.asList("AI", String.valueOf(body.getPosition().x), String.valueOf(body.getPosition().y)));
 		updateBounds();
+		update(delta);
+	}
+
+	public void update(float delta) {
+		if (behavior != null) {
+			behavior.calculateSteering(steeringAcceleration);
+			applySteering(delta);
+		}
+	}
+
+	private void applySteering(float delta) {
+		boolean anyAccelerations = false;
+
+		if (!steeringAcceleration.linear.isZero()) {
+			Vector2 force = steeringAcceleration.linear.scl(delta);
+			body.applyForceToCenter(force, true);
+			anyAccelerations = true;
+		}
+
+		if (anyAccelerations) {
+			Vector2 velocity = body.getLinearVelocity();
+			if (velocity.len2() > maxLinearSpeed * maxLinearSpeed) {
+				body.setLinearVelocity(velocity.scl(maxLinearSpeed / (float) Math.sqrt(velocity.len2())));
+			}
+		}
 	}
 
 	public Body getBody() {
