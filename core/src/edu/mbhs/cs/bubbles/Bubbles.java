@@ -273,8 +273,8 @@ public class Bubbles implements Screen {
 		
 		float dist, theta, dx, dy;
 		for (Bubble bubble : b) {
-			renderer.setColor(Color.RED);
-			if(!bubble.isFriend()) renderer.setColor(Color.WHITE);
+			renderer.setColor(Color.WHITE);
+			if(!bubble.isFriend()) renderer.setColor(Color.RED);
 			dx = cam.position.x / Bubble.METERS_TO_PIXELS - (bubble.getBody().getPosition().x + Bubble.RADIUS / 2);
 			dy = cam.position.y / Bubble.METERS_TO_PIXELS - (bubble.getBody().getPosition().y + Bubble.RADIUS / 2);
 			dist = (float) Math.hypot(dx, dy);

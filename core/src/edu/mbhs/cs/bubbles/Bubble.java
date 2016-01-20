@@ -62,7 +62,6 @@ public class Bubble extends Actor {
 	    fixture = body.createFixture(def);
 		fixture.setUserData(Arrays.asList("Bubble", String.valueOf(body.getPosition().x), String.valueOf(body.getPosition().y)));
 		shape.dispose();
-		System.out.println(body.getMass());
 	}
 
 	public boolean isFriend() {
