@@ -13,8 +13,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
+import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
 
+import java.sql.Time;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Class representing the player, a small circle in the sea of bubbles
@@ -41,10 +45,14 @@ public class PlayerAI extends Actor implements Steerable<Vector2> {
 	private Fixture fixture;
 	private TextureRegion texture = new TextureRegion();
 
+	private World world;
+
 	/**
 	 * Makes a new player
 	 */
 	public PlayerAI(World w) {
+		world = w;
+
 		texture.setTexture(new Texture(Gdx.files.internal("mandleplayer.png")));
 		texture.setRegion(texture.getTexture());
 
@@ -77,20 +85,40 @@ public class PlayerAI extends Actor implements Steerable<Vector2> {
 	}
 
 	private void updateBehavior() {
-		SteeringBehavior<Vector2> behavior;
+		SteeringBehavior<Vector2> behavior = null;
 
-		// if about to collide with bubble, avoid collision
-		// TODO: implement
+		Body[] bodies = new Body[TimeTrial.BUBBLE_NUMBER + TimeTrial.FLAG_NUMBER + 2];
+		world.getBodies(Array.with(bodies));
+		Body closest = null;
+		float minDist = getStage().getWidth() / 5;
+		for (Body body : bodies) {
+			float dist = body.getPosition().dst(this.body.getPosition());
+			if (body != this.body && dist < minDist) {
+				minDist = dist;
+				closest = body;
+			}
+		}
 
-		// if about to collide with player, evade
-		// TODO: implement
+		String name = "";
+		if (closest != null) {
+			name = (String) ((List) closest.getUserData()).get(0);
+		}
 
-		// if in valid radius of flag, seek flag
-		// TODO: implement
+		if (name.equals("Bubble")) {
+			// if about to collide with bubble, avoid collision
+		}
+		else if (name.equals("Player")) {
+			// if about to collide with player, evade
 
-		// otherwise wander
-		behavior = new Wander<Vector2>(this)
-				.setWanderRadius(500);
+		}
+		else if (name.equals("Flag")) {
+			// if in valid radius of flag, seek flag
+		}
+		else {
+			// otherwise wander
+			behavior = new Wander<Vector2>(this)
+					.setWanderRadius(500);
+		}
 
 		setBehavior(behavior);
 	}

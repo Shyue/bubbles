@@ -23,8 +23,9 @@ import java.util.List;
  */
 public class TimeTrial implements Screen {
 
-	private static int BUBBLE_NUMBER = 50;
-	private static int FLAG_NUMBER = 5;
+	public static int BUBBLE_NUMBER = 50;
+	public static int FLAG_NUMBER = 5;
+
 	private static float PUSH_SPEED = 10000;
 
 	private Bubble[] b = new Bubble[BUBBLE_NUMBER];
