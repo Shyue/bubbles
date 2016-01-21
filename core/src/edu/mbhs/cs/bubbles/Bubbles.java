@@ -66,7 +66,7 @@ public class Bubbles implements Screen {
 		stage.addActor(p);
 
 		// add background
-		text = new Texture(Gdx.files.internal("buble.png"));
+		text = new Texture(Gdx.files.internal("water.jpg"));
 		text.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
 
 		//setting up the camera

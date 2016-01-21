@@ -28,7 +28,7 @@ public class Bubble extends Actor {
 	private float r_vel, g_vel, b_vel;	//color velocities
 	private Fixture fixture;
 
-	private Texture texture = new Texture(Gdx.files.internal("ball.png"));
+	private Texture texture = new Texture(Gdx.files.internal("colorBubble.png"));
 
 	/**
 	 * Places bubble at bottom left corner, gives it a radius of 64, gives it a random x and y velocity
@@ -55,7 +55,7 @@ public class Bubble extends Actor {
 	    def.shape = shape;
 	    def.density = 0.1f;
 	    if(!friend){
-			texture = new Texture(Gdx.files.internal("spiked.png"));
+			texture = new Texture(Gdx.files.internal("urchin.png"));
 			def.density = 0.4f;
 		}
 		def.restitution = 0.5f;

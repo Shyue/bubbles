@@ -36,7 +36,7 @@ public class Player extends Actor implements GestureListener{
 	 * Makes a new player
 	 */
 	public Player(World w) {
-		texture.setTexture(new Texture(Gdx.files.internal("mandleplayer.png")));
+		texture.setTexture(new Texture(Gdx.files.internal("turtle.png")));
 		texture.setRegion(texture.getTexture());
 
 		x = Gdx.graphics.getWidth() / 2;
@@ -108,13 +108,13 @@ public class Player extends Actor implements GestureListener{
 				texture,
 				(body.getPosition().x - RADIUS) * METERS_TO_PIXELS,
 				(body.getPosition().y - RADIUS) * METERS_TO_PIXELS,
-				518f / texture.getRegionWidth()* RADIUS * METERS_TO_PIXELS,
-				(686f - 340f) / texture.getRegionHeight() * RADIUS * METERS_TO_PIXELS,
+				RADIUS * METERS_TO_PIXELS,
+				RADIUS * METERS_TO_PIXELS,
 				RADIUS * 2 * METERS_TO_PIXELS,
 				RADIUS * 2 * METERS_TO_PIXELS,
 				1f,
 				texture.getRegionHeight() / texture.getRegionWidth(),
-				body.getLinearVelocity().angle() - 90,
+				body.getLinearVelocity().angle(),
 				true
 		);
 	}
